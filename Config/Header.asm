@@ -228,7 +228,7 @@ ICD_BLK		EQU	.PrgInit
 		headStr	"\NOTES", $20			; Notes
 		headStr	"\GAME_NAME", $30		; International game name
 		dc.b	"GM 00000000-00"		; Version
-		dc.w	0				; Checksum value (replaced by external program)
+		dc.w	$BEEF				; Checksum value (replaced by external program)
 		headStr	"\IO_SUPPORT", $10		; I/O support
 		dc.l	ROM_START, ROM_END-1		; ROM start and end addresses (replaced by external program)
 		dc.l	RAM_START, RAM_END-1		; RAM start and end addresses
