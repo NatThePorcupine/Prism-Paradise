@@ -12,7 +12,6 @@
 		include	"Config/Variables.asm"		; Variables
 
 		include	"Config/Error/debugger.asm"	; Debugger macro set
-		include "Sound/Definitions.asm"		; Include sound driver macros and functions
 		
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Header
@@ -66,12 +65,12 @@ GotoGameMode:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Function libraries
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-		include	"Libraries/VDP.asm"			; VDP functions
-		include	"Libraries/Joypad.asm"			; Joypad functions
-		include	"Libraries/Decompression.asm"		; Decompression functions
-		include	"Libraries/Math.asm"			; Math functions
-		include	"Libraries/Object.asm"			; Object functions
-		include	"Libraries/Interrupt.asm"		; Interrupt functions
+		include	"Libraries/VDP.asm"		; VDP functions
+		include	"Libraries/Joypad.asm"		; Joypad functions
+		include	"Libraries/Decompression.asm"	; Decompression functions
+		include	"Libraries/Math.asm"		; Math functions
+		include	"Libraries/Object.asm"		; Object functions
+		include	"Libraries/Interrupt.asm"	; Interrupt functions
 
 ; =========================================================================================================================================================
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -89,27 +88,27 @@ ObjNull:
 		jmp	DeleteObject
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		include	"Objects/Player/Code.asm"		; Player object
-		include	"Objects/Ring/Code.asm"			; Ring loss object
-		include	"Objects/Explosion/Code.asm"		; Explosion object
+		include	"Objects/Ring/Code.asm"		; Ring loss object
+		include	"Objects/Explosion/Code.asm"	; Explosion object
 		include	"Objects/Water Surface/Code.asm"	; Water surface object
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-		include	"Objects/Monitor/Code.asm"		; Monitor object
+		include	"Objects/Monitor/Code.asm"	; Monitor object
 		include	"Objects/Spikes/Code.asm"		; Spike object
 		include	"Objects/Spring/Code.asm"		; Spring object
-		include	"Objects/Checkpoint/Code.asm"		; Checkpoint object
-		include	"Objects/Wall Spring/Code.asm"		; Wall spring object
-		include	"Objects/Ball Mode/Code.asm"		; Ball mode switch object
+		include	"Objects/Checkpoint/Code.asm"	; Checkpoint object
+		include	"Objects/Wall Spring/Code.asm"	; Wall spring object
+		include	"Objects/Ball Mode/Code.asm"	; Ball mode switch object
 		include	"Objects/Bumper/Code.asm"		; Bumper object
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Unused/Temporary
 ;		include	"Objects/Slicer/Code.asm"		; Slicer object
-;		include	"Objects/Shellcracker/Code.asm"		; Shellcracker object
-;		include	"Objects/Asteron/Code.asm"		; Asteron object
-;		include	"Objects/Boss - WFZ/Code.asm"		; WFZ boss object
-;		include	"Objects/Harpoon/Code.asm"		; Harpoon object
-;		include	"Objects/CNZ Barrel/Code.asm"		; CNZ barrel object
-;		include	"Objects/Diamond/Code.asm"		; Diamond object
-;		include	"Objects/Orbinaut/Code.asm"		; Orbinaut object
+;		include	"Objects/Shellcracker/Code.asm"	; Shellcracker object
+;		include	"Objects/Asteron/Code.asm"	; Asteron object
+;		include	"Objects/Boss - WFZ/Code.asm"	; WFZ boss object
+;		include	"Objects/Harpoon/Code.asm"	; Harpoon object
+;		include	"Objects/CNZ Barrel/Code.asm"	; CNZ barrel object
+;		include	"Objects/Diamond/Code.asm"	; Diamond object
+;		include	"Objects/Orbinaut/Code.asm"	; Orbinaut object
 
 ; =========================================================================================================================================================
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -247,8 +246,8 @@ ArtUnc_Sirens:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Sound driver
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-		include "Sound/Engine/Sonic 2 Clone Driver v2.asm"	; Modified Clownacy's Sonic 2 Clone Driver
-		include "Sound/Engine/MegaPCM.asm"			; Vladikcomper's MegaPCM 2.0
+;		include	"Sound/amps/code/68k.asm"
+
 
 ; =========================================================================================================================================================
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
