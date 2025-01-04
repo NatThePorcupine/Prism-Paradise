@@ -58,7 +58,7 @@ zDACBanks:
 ; Indeterminate Data (IDs, banks, and addresses that are unknown until the 68K ROM is built)
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 zSFXBank:	bank_entry	SOUND_SFXIndex
-zSFXAddr:	address_entry	SOUND_SFXIndex
+zSFXAddr:	ptr_entry	SOUND_SFXIndex
 
 zSFXRingR:	id_entry	SndID_Ring
 zSFXRingL:	id_entry	SndID_RingLeft
