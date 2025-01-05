@@ -64,17 +64,6 @@ zSFXRingR:	id_entry	SndID_Ring
 zSFXRingL:	id_entry	SndID_RingLeft
 zSFXPushing:	id_entry	SndID_Push
 zSFXSpinRev:	id_entry	SndID_SpindashRev
-
-; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-; Externally Visible Sound Queue Variables
-; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-zSoundQueues:
-
-zQueueToPlay		equ	zSoundQueues		; if NOT set to 80h, means new index was requested by 68K
-zSFXToPlay		equ	zQueueToPlay+1		; When Genesis wants to play "normal" sound, it writes it here
-zSFXStereoToPlay	equ	zSFXToPlay+1		; When Genesis wants to play alternating stereo sound, it writes it here
-zSFXUnknown		equ	zSFXStereoToPlay+1	; Unknown type of sound queue, but it's in Genesis code like it was once used
-
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Constants
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -82,4 +71,8 @@ CmdID__First: 	equ	0FBh
 CmdID__End:	equ	100h
 SndID__First:	equ	MusID__End
 SndID__End:	equ	CmdID__First
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Shared Symbols
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	shared	zStreamOutput, zQueueToPlay, zSFXToPlay, zSFXStereoToPlay, zSFXUnknown
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------

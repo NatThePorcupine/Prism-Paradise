@@ -222,6 +222,11 @@ zSpindashExtraFrequencyIndex:	ds 1 ; zbyte_1305
 zSpindashActiveFlag:		ds 1 ; zbyte_1306 ; -1 if spindash charge was the last sound that played
     endif
 
+zQueueToPlay:		ds 1	; if NOT set to 80h, means new index was requested by 68K
+zSFXToPlay:		ds 1	; When Genesis wants to play "normal" sound, it writes it here
+zSFXStereoToPlay:	ds 1	; When Genesis wants to play alternating stereo sound, it writes it here
+zSFXUnknown:		ds 1 ; Unknown type of sound queue, but it's in Genesis code like it was once used
+
 zAbsVar:		zVar
 
 zTracksStart:		; This is the beginning of all BGM track memory
