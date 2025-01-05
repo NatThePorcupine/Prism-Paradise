@@ -27,23 +27,23 @@ SampleID_Tom:		pcm_ptr_entry SndDAC_Sample6
 SampleID_Bongo:		pcm_ptr_entry SndDAC_Sample7
 
 zDACMasterPlaylist:	rsset 81h
-	pcm_id_entry	SampleID_Kick,6
-	pcm_id_entry	SampleID_Snare,2
-	pcm_id_entry	SampleID_Timpani,0Ch
-	pcm_id_entry	SampleID_Timpani,5
-	pcm_id_entry	SampleID_Timpani,8
-	pcm_id_entry	SampleID_Timpani,0Ah
+	pcm_id_entry	SampleID_Kick,0Ch
+	pcm_id_entry	SampleID_Snare,1
+	pcm_id_entry	SampleID_Timpani,0Dh
+	pcm_id_entry	SampleID_Timpani,9
+	pcm_id_entry	SampleID_Timpani,0Bh
 	pcm_id_entry	SampleID_Timpani,0Eh
-	pcm_id_entry	SampleID_Clap,6+2
-	pcm_id_entry	SampleID_Scratch,8+2
-	pcm_id_entry	SampleID_Tom,0Ah+2
-	pcm_id_entry	SampleID_Bongo,1Bh+2
-	pcm_id_entry	SampleID_Tom,2+2
-	pcm_id_entry	SampleID_Tom,5+2
-	pcm_id_entry	SampleID_Tom,8+2
-	pcm_id_entry	SampleID_Bongo,8+2
-	pcm_id_entry	SampleID_Bongo,0Bh+2
-	pcm_id_entry	SampleID_Bongo,12h+2
+	pcm_id_entry	SampleID_Timpani,0Fh
+	pcm_id_entry	SampleID_Clap,2
+	pcm_id_entry	SampleID_Scratch,6
+	pcm_id_entry	SampleID_Tom,5
+	pcm_id_entry	SampleID_Bongo,0Dh
+	pcm_id_entry	SampleID_Tom,1
+	pcm_id_entry	SampleID_Tom,2
+	pcm_id_entry	SampleID_Tom,4
+	pcm_id_entry	SampleID_Bongo,4
+	pcm_id_entry	SampleID_Bongo,5
+	pcm_id_entry	SampleID_Bongo,9
 
 zDACBanks:
 	bank_entry	SndDAC_Sample1

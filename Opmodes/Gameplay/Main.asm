@@ -23,13 +23,13 @@ Level_NoFade:
 		move.w	d0,vdpWindowY.w			; ''
 		move.w	d0,(a5)				; ''
 		clr.w	dmaQueue.w			; Set stop token at the beginning of the DMA queue
-		move.w	#dmaQueue,dmaSlot.w	; Reset the DMA queue slot
+		move.w	#dmaQueue,dmaSlot.w		; Reset the DMA queue slot
 
 		jsr	ClearScreen.w			; Clear the screen
 
 		; --- Clear some RAM ---
 
-		clrRAM	kosVars			; Clear Kosinski queue variables
+		clrRAM	kosVars				; Clear Kosinski queue variables
 		clrRAM	opmodeVars			; Clear variables
 		clrRAM	oscillators			; Clear oscillation data
 
@@ -37,15 +37,15 @@ Level_NoFade:
 
 		move.b	#3,ringAnimTime.w		; Set ring animation timer
 		move.w	#30,rFloorTimer.w		; Set floor timer
-		clr.w	palCycTimer.w		; Reset palette cycle
+		clr.w	palCycTimer.w			; Reset palette cycle
 
 		lea	Level_MusicIDs(pc),a0		; Music ID list
 		move.w	levelID.w,d0			; Get level ID
 		ror.b	#1,d0				; Turn into offset
 		lsr.w	#7,d0				; ''
 		move.b	(a0,d0.w),d0			; Get music ID
-		move.b	d0,lvlMusic.w		; Store it
-		;playsnd	d0, 1				; Play it
+		move.b	d0,lvlMusic.w			; Store it
+		jsr	SOUND_PlayMusic
 
 		intsOn					; Enable interrupts
 
@@ -246,7 +246,7 @@ CheckPause:
 ; Music IDs
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_MusicIDs:
-	;	dc.b	mWWZ, mWWZ
+		dc.b	MusID_MTZ, MusID_MTZ
 		dc.b	-1, -1
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Level water heights (-1 for no water)

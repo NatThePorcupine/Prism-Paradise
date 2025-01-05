@@ -710,7 +710,7 @@ zStreamOutput:
 	ld	(zYM2612_D0),a	; 13
 
 	ld	a,(zYM2612_A0)	; 13
-	and	2
+	and	2		; 07
 	jp	z,zStreamOutput	; 10
 
 	rst	zVInt
