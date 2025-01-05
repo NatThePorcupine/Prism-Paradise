@@ -170,10 +170,10 @@ zVar STRUCT DOTS
 	FadeOutDelay:		ds 1
 	Communication:		ds 1	; Unused byte used to synchronise gameplay events with music
 	DACUpdating:		ds 1 ; Set to FFh while DAC is updating, then back to 00h
-	QueueToPlay:		ds 1	; if NOT set to 80h, means new index was requested by 68K
-	SFXToPlay:		ds 1	; When Genesis wants to play "normal" sound, it writes it here
-	SFXStereoToPlay:	ds 1	; When Genesis wants to play alternating stereo sound, it writes it here
-	SFXUnknown:		ds 1 ; Unknown type of sound queue, but it's in Genesis code like it was once used
+;	QueueToPlay:		ds 1	; if NOT set to 80h, means new index was requested by 68K
+;	SFXToPlay:		ds 1	; When Genesis wants to play "normal" sound, it writes it here
+;	SFXStereoToPlay:	ds 1	; When Genesis wants to play alternating stereo sound, it writes it here
+;	SFXUnknown:		ds 1 ; Unknown type of sound queue, but it's in Genesis code like it was once used
 	VoiceTblPtr:		ds 2	; address of the voices
 	FadeInFlag:		ds 1
 	FadeInDelay:		ds 1
@@ -400,7 +400,7 @@ zVInt:    rsttarget
 	rst	zBankSwitchToMusic	; Bank switch to the music (depending on which BGM is playing in my version)
 	xor	a						; Clear 'a'
 	ld	(zDoSFXFlag),a			; Not updating SFX (updating music)
-	ld	ix,zComRange			; ix points to zComRange
+	ld	ix,zAbsVar			; ix points to zComRange
 	ld	a,(zAbsVar.StopMusic)			; Get pause/unpause flag
 	or	a						; test 'a'
 	jr	z,zUpdateEverything		; If zero, go to zUpdateEverything
@@ -422,15 +422,17 @@ zUpdateEverything:
 	call	nz,zUpdateFadeIn	; If so, update that
 	rst	zFlushSingleSample
 
-	ld	a,(zAbsVar.SFXToPlay)			; zComRange+09h -- play normal sound
-	or	(ix+zVar.SFXStereoToPlay)				; zComRange+0Ah -- play stereo sound (alternating speakers)
-	or	(ix+zVar.SFXUnknown)				; zComRange+0Bh -- "unknown" slot
+	ld	a,(zSFXToPlay)			; zComRange+09h -- play normal sound
+	ld	hl,zSFXStereoToPlay
+	or	(hl)				; zComRange+0Ah -- play stereo sound (alternating speakers)
+	inc	hl
+	or	(hl)				; zComRange+0Bh -- "unknown" slot
 	call	nz,zCycleQueue		; If any of those are non-zero, cycle queue
 	rst	zFlushSingleSample
 	
 	; Apparently if this is 00h, it does not play anything new,
 	; otherwise it cues up the next play (flag from 68K for new item)
-	ld	a,(zAbsVar.QueueToPlay)
+	ld	a,(zQueueToPlay)
 	or	a
 	call	nz,zPlaySoundByIndex	; If not 80h, we need to play something new!
 	rst	zFlushSingleSample
@@ -1404,10 +1406,10 @@ zResumeTrack:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 ;zsub_674
 zCycleQueue:
-	ld	a,(zAbsVar.QueueToPlay)	; Check if a sound request was made zComRange+08h
+	ld	a,(zQueueToPlay)	; Check if a sound request was made zComRange+08h
 	or	a					; Is queue slot equal to 00h?
 	ret	nz					; If not, return
-	ld	hl,zAbsVar.SFXToPlay		; Get address of next sound
+	ld	hl,zSFXToPlay		; Get address of next sound
     if OptimiseDriver
 	ld	c,(ix+zVar.SFXPriorityVal)	; Get current SFX priority
     else
@@ -1451,7 +1453,7 @@ zlocQueueNext:
 ; ---------------------------------------------------------------------------
 zlocQueueItem:
 	ld	a,e				; restore a to be the last queue item read
-	ld	(zAbsVar.QueueToPlay),a	; Put it as the next item to play
+	ld	(zQueueToPlay),a	; Put it as the next item to play
 	ret
 ; End of function zCycleQueue
 
@@ -1459,7 +1461,10 @@ zlocQueueItem:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 ; zsub_6B2:
 zPlaySoundByIndex:
-	ld	(ix+zVar.QueueToPlay),0					; Rewrite zComRange+8 flag so we know nothing new is coming in 
+	push	af
+	xor	a
+	ld	(zQueueToPlay),a					; Rewrite zComRange+8 flag so we know nothing new is coming in 
+	pop	af
 	cp	MusID__End					; is it music (less than index 20)?
 	jp	c,zPlayMusic				; if yes, branch to play the music
 	cp	SndID__First				; is it not a sound? (this check is redundant if MusID__End == SndID__First...)
@@ -2349,13 +2354,13 @@ zClearTrackPlaybackMem:
 	ld	c,0Fh							; All clear
 	call	zWriteFMI					; Write it!
 	; This performs a full clear across all track/playback memory
-	ld	hl,zComRange
-	ld	de,zComRange+1
+	ld	hl,zAbsVar
+	ld	de,zAbsVar+1
 	ld	(hl),0						; Starting byte is 00h
-	ld	bc,(zTracksSFXEnd-zComRange)-1						; For 695 bytes...
+	ld	bc,(zTracksSFXEnd-zAbsVar)-1						; For 695 bytes...
 	ldir							; 695 bytes of clearing!  (Because it will keep copying the byte prior to the byte after; thus 00h repeatedly)
 	xor	a
-	ld	(zAbsVar.QueueToPlay),a			; Nothing is queued
+	ld	(zQueueToPlay),a			; Nothing is queued
 	call	zFMSilenceAll			; Silence FM
 	jp	zPSGSilenceAll				; Silence PSG
 ; End of function zClearTrackPlaybackMem
@@ -2373,30 +2378,28 @@ zInitMusicPlayback:
 	; specific to the music tracks...
 
 	; Save some queues/flags:
-	ld	ix,zComRange
+	ld	ix,zAbsVar
 	ld	b,(ix+zVar.SFXPriorityVal)
 	ld	c,(ix+zVar.1upPlaying)		; 1-up playing flag
 	push	bc
 	ld	b,(ix+zVar.SpeedUpFlag)		; speed shoe flag
 	ld	c,(ix+zVar.FadeInCounter)		; fade in frames
 	push	bc
-	ld	b,(ix+zVar.SFXToPlay)		; SFX queue slot
-	ld	c,(ix+zVar.SFXStereoToPlay)		; Stereo SFX queue slot
-	push	bc
-	ld	b,(ix+zVar.SFXUnknown)		; Unknown SFX queue slot
-	push	bc
+;	ld	bc,(zQueueToPlay)		; Queue to play slot + SFX queue slot 
+;	push	bc
+;	ld	bc,(zSFXStereoToPlay)		; Stereo SFX queue slot + Unknown SFX queue slot
+;	push	bc
 	; The following clears all playback memory and non-SFX tracks
-	ld	hl,zComRange
-	ld	de,zComRange+1
+	ld	hl,zAbsVar
+	ld	de,zAbsVar+1
 	ld	(hl),0
-	ld	bc,(zTracksEnd-zComRange)-1			; this many bytes (from start of zComRange to just short of end of PSG3 music track)
+	ld	bc,(zTracksEnd-zAbsVar)-1			; this many bytes (from start of zComRange to just short of end of PSG3 music track)
 	ldir
 	; Restore those queue/flags:
-	pop	bc
-	ld	(ix+zVar.SFXUnknown),b		; Unknown SFX queue slot
-	pop	bc
-	ld	(ix+zVar.SFXToPlay),b		; SFX queue slot
-	ld	(ix+zVar.SFXStereoToPlay),c		; Stereo SFX queue slot
+;	pop	bc
+;	ld	(zSFXStereoToPlay),bc		; Stereo SFX queue slot + Unknown SFX queue slot
+;	pop	bc
+;	ld	(zQueueToPlay),bc		; Queue to play slot + SFX queue slot 
 	pop	bc
 	ld	(ix+zVar.SpeedUpFlag),b		; speed shoe flag
 	ld	(ix+zVar.FadeInCounter),c		; fade in frames
@@ -2404,7 +2407,7 @@ zInitMusicPlayback:
 	ld	(ix+zVar.SFXPriorityVal),b
 	ld	(ix+zVar.1upPlaying),c		; 1-up playing flag
 	xor	a
-	ld	(zAbsVar.QueueToPlay),a
+	ld	(zQueueToPlay),a
 	; Silence hardware!
     if FixDriverBugs
 	; If a music file's header doesn't define each and every channel, they

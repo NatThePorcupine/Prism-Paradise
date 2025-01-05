@@ -6,15 +6,15 @@
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 zMasterPlaylist:	rsset 1
 MusID__First:		equ __rs
-MusID_MTZ:		music_entry Mus_MTZ
-MusID_Invincible:	music_entry Mus_Invincible
-MusID_ExtraLife:	music_entry Mus_ExtraLife
-MusID_Boss:		music_entry Mus_Boss
-MusID_GotThrough:	music_entry Mus_GotThrough
-MusID_GameOver:		music_entry Mus_GameOver,1
-MusID_Continue:		music_entry Mus_Continue
-MusID_Drowning:		music_entry Mus_Drowning,1
-MusID_Emerald:		music_entry Mus_Emerald
+MusID_MTZ:		music_entry MUSIC_MTZ
+MusID_Invincible:	music_entry MUSIC_Invincible
+MusID_ExtraLife:	music_entry MUSIC_ExtraLife
+MusID_Boss:		music_entry MUSIC_Boss
+MusID_GotThrough:	music_entry MUSIC_GotThrough
+MusID_GameOver:		music_entry MUSIC_GameOver,1
+MusID_Continue:		music_entry MUSIC_Continue
+MusID_Drowning:		music_entry MUSIC_Drowning,1
+MusID_Emerald:		music_entry MUSIC_Emerald
 MusID__End:		equ __rs
 
 zDACPtrTbl:		rsset 80h
@@ -64,6 +64,16 @@ zSFXRingR:	id_entry	SndID_Ring
 zSFXRingL:	id_entry	SndID_RingLeft
 zSFXPushing:	id_entry	SndID_Push
 zSFXSpinRev:	id_entry	SndID_SpindashRev
+
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Externally Visible Sound Queue Variables
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+zSoundQueues:
+
+zQueueToPlay		equ	zSoundQueues		; if NOT set to 80h, means new index was requested by 68K
+zSFXToPlay		equ	zQueueToPlay+1		; When Genesis wants to play "normal" sound, it writes it here
+zSFXStereoToPlay	equ	zSFXToPlay+1		; When Genesis wants to play alternating stereo sound, it writes it here
+zSFXUnknown		equ	zSFXStereoToPlay+1	; Unknown type of sound queue, but it's in Genesis code like it was once used
 
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Constants

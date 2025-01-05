@@ -476,7 +476,7 @@ vcTL4 set \op4
 	dc.b	(vcUnusedBits<<6)+(vcFeedback<<3)+vcAlgorithm
 ;   0     1     2     3     4     5     6     7
 ;%1000,%1000,%1000,%1000,%1010,%1110,%1110,%1111
-vcTLMask4 set ((vcAlgorithm==7)<<7)
+vcTLMask4 set ((vcAlgorithm=7)<<7)
 vcTLMask3 set ((vcAlgorithm>=4)<<7)
 vcTLMask2 set ((vcAlgorithm>=5)<<7)
 vcTLMask1 set $80
