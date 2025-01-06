@@ -215,7 +215,10 @@ ObjMonitorContents_GetType:
 		movea.w	playerPtrP1.w,a0
 		jsr	ObjPlayer_GetHurt
 		pop.l	a0
-		rts
+	
+		move.b	#MusID_ExtraLife,d0
+		jmp	SOUND_PlayMusic
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .ChkRings:
 		cmpi.b	#2,d0
@@ -223,6 +226,8 @@ ObjMonitorContents_GetType:
 		addi.w	#10,ringCount.w 				; add 10 rings to the number of rings you have
 		ori.b	#1,hudUpdateRings.w 			; update the ring counter
 		;playsnd	#sRing, 2				; Play ring sound
+		move.b	#SndID_Ring,d0
+		jmp	SOUND_PlaySFX
 
 .Display:
 		rts

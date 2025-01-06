@@ -26,7 +26,7 @@ ObjBumperMain:
 		bcc.w	.Display
 		jsr	CheckObjInRange.w		; Is the player in range?
 		tst.w	d0				; ''
-		beq.s	.Display			; If not, branch
+		beq.w	.Display			; If not, branch
 
 		move.w	_objXPos(a0),d1
 		move.w	_objYPos(a0),d2
@@ -58,6 +58,8 @@ ObjBumperMain:
 		clr.b	_objJumping(a2)
 		move.b	#1,_objAnim(a0)
 		;playsnd	#sBumper, 2
+		move.b	#SndID_Bumper,d0
+		jsr	SOUND_PlaySFX
 
 .Display:
 		lea	Ani_ObjBumper(pc),a1

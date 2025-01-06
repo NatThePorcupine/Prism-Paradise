@@ -75,7 +75,7 @@ ObjWallSpring_Main:
 
 .ChkFlip:
 		btst	#0,d0				; Should Sonic tumble?
-		beq.s	.;playsnd			; If not, branch
+		beq.s	.PlaySnd			; If not, branch
 		move.w	#1,_objFlipDir(a1)			; Set flip direction
 		move.b	#1,_objFlipAngle(a1)		; Set flip angle
 		clr.b	_objAnim(a1)			; Reset animation
@@ -87,15 +87,17 @@ ObjWallSpring_Main:
 
 .ChkDir:
 		btst	#0,_objStatus(a1)			; Was Sonic facing left?
-		beq.s	.;playsnd			; If not, branch
+		beq.s	.PlaySnd			; If not, branch
 		neg.b	_objFlipAngle(a1)			; Flip the other way
 		neg.w	_objFlipDir(a1)			; ''
 
-.;playsnd:
+.PlaySnd:
 		bclr	#cPushBit,_objStatus(a0)		; Stop pushing
 		bclr	#cPushBit,_objStatus(a1)		; ''
 		;playsnd	#sSpring, 2			; Play spring sound
-		rts
+		move.b	#SndID_Spring,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Data
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------

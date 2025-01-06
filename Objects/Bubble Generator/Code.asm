@@ -232,6 +232,9 @@ ObjBubbles_ChkSonic:
 
 		jsr	ObjDrown_ResetDrown
 		;playsnd	#sBubble, 2
+		move.b	#SndID_InhalingBubble,d0
+		jsr	SOUND_PlaySFX
+		
 		clr.l	_objXVel(a1)
 		clr.w	_objGVel(a1)
 		move.b	#$15,_objAnim(a1)

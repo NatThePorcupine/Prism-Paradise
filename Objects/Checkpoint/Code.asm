@@ -62,6 +62,8 @@ ObjChkpoint_Main:
 		bcc.w	ObjChkpoint_Animate		; If not, branch
 		
 		;playsnd	#sCheckpoint, 2			; Play checkpoint sound
+			move.b	#SndID_Checkpoint,d0
+		jsr	SOUND_PlaySFX
 
 		jsr	FindFreeObj.w			; Find a free object slot
 		beq.s	.SetPoint			; If there is none, branch

@@ -118,7 +118,9 @@ ObjSpring_Up:
 
 .PlaySound:
 		;playsnd	#sSpring, 2			; Play spring sound
-		rts
+		move.b	#SndID_Spring,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjSpring_Horizontal:
 		move.w	#20-1,d1			; Width
@@ -186,7 +188,9 @@ ObjSpring_Horizontal:
 		bclr	#cPushBit,_objStatus(a0)		; Clear "push" flags
 		bclr	#cPushBit,_objStatus(a1)		; ''
 		;playsnd	#sSpring, 2			; Play spring sound
-		rts
+		move.b	#SndID_Spring,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjSpring_Down:
 		move.w	#19-1,d1			; Width
@@ -232,7 +236,9 @@ ObjSpring_Down:
 		bclr	#cStandBit,_objStatus(a1)		; Make the player no longer be on the spring
 		move.b	#4,_objRoutine(a1)			; Reset the player's routine
 		;playsnd	#sSpring, 2			; Play spring sound
-		rts
+		move.b	#SndID_Spring,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjSpring_DiagonallyUp:
 		move.w	#26-1,d1			; Width
@@ -301,7 +307,9 @@ ObjSpring_DiagonallyUp:
 
 .PlaySound:
 		;playsnd	#sSpring, 2			; Play spring sound
-		rts
+		move.b	#SndID_Spring,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .SlopeData:
 		dc.b	$10, $10, $10, $10, $10, $10, $10
@@ -359,7 +367,9 @@ ObjSpring_DiagonallyDown:
 
 .PlaySound:
 		;playsnd	#sSpring, 2			; Play spring sound
-		rts
+		move.b	#SndID_Spring,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .SlopeData:
 		dc.b	$F4, $F0, $F0, $F0, $F0, $F0, $F0

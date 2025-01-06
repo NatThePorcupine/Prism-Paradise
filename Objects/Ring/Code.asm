@@ -43,6 +43,8 @@ ObjRingLoss:
 		clr.w	ringCount.w
 		move.b	#1,hudUpdateRings.w
 		;playsnd	#sRingLoss, 2
+		move.b	#SndID_RingSpill,d0
+		jsr	SOUND_PlaySFX
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjLostRing:
 		jsr	ObjectMove.w

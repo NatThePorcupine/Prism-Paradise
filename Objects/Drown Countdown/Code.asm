@@ -178,6 +178,8 @@ ObjDrownCnt_Count:
 
 .WarnSound:
 		;playsnd	#sDrownWarn, 2			; Play drown warn sound
+		move.b	#SndID_DrownWarning,d0
+		jsr	SOUND_PlaySFX
 
 .ReduceAir:
 		subq.b	#1,(rObj_Player+_objAirTimer).w	; Reduce air
@@ -186,6 +188,9 @@ ObjDrownCnt_Count:
 		bsr.w	ObjDrown_ResetDrown		; Reset drowning stuff
 		move.w	#$FFFF,camLocked.w		; Lock the camera
 		;playsnd	#sDrown, 2			; Play drowning sound
+		move.b	#SndID_Drown,d0
+		jsr	SOUND_PlaySFX
+		
 		move.b	#$A,_objAirUnk34(a0)
 		move.w	#1,_objAirUnk36(a0)
 		move.w	#$78,_objAirUnk2C(a0)

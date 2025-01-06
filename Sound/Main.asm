@@ -46,6 +46,7 @@ SOUND_LoadDriver:
 ;	Nothing
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 SOUND_PlayMusic:
+		move	sr,-(sp)
 		intsOff
 		doZ80Stop				; Stop the Z80 so the 68k can write to Z80 RAM
 		waitZ80Stop
@@ -53,13 +54,13 @@ SOUND_PlayMusic:
 		bne.s	.altQueue			; If so, we'll put this sound in a different queue
 		move.b	d0,(Z80_RAM+zQueueToPlay).l	; Queue sound
 		startZ80				; Start the Z80 back up again so the sound driver can continue functioning
-		intsOn
+		move	(sp)+,sr
 		rts
 
 .altQueue:
 		move.b  d0,(Z80_RAM+zSFXUnknown).l      ; Queue sound
 		startZ80				; Start the Z80 back up again so the sound driver can continue functioning
-		intsOn
+		move	(sp)+,sr
 		rts
 
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -72,6 +73,7 @@ SOUND_PlayMusic:
 ;	Nothing
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 SOUND_PlaySFX:
+		move	sr,-(sp)
 		intsOff
 		doZ80Stop				; Stop the Z80 so the 68k can write to Z80 RAM
 		waitZ80Stop
@@ -79,13 +81,13 @@ SOUND_PlaySFX:
 		bne.s	.altQueue			; If so, we'll put this sound in a different queue
 		move.b	d0,(Z80_RAM+zSFXToPlay).l	; Queue sound
 		startZ80				; Start the Z80 back up again so the sound driver can continue functioning
-		intsOn
+		move	(sp)+,sr
 		rts
 
 .altQueue:
 		move.b  d0,(Z80_RAM+zSFXStereoToPlay).l	; Queue sound
 		startZ80				; Start the Z80 back up again so the sound driver can continue functioning
-		intsOn
+		move	(sp)+,sr
 		rts
 
 ; =========================================================================================================================================================
@@ -126,6 +128,11 @@ SndID_SpikesMove	sfx_ptr_entry	SFX_SpikesMove
 SndID_Smash		sfx_ptr_entry	SFX_Smash
 SndID_SpindashRelease	sfx_ptr_entry	SFX_SpindashRelease
 SndID_Roll		sfx_ptr_entry	SFX_Roll
+SndID_ContinueJingle	sfx_ptr_entry	SFX_ContinueJingle
+SndID_CasinoBonus	sfx_ptr_entry	SFX_CasinoBonus
+SndID_Explosion		sfx_ptr_entry	SFX_Explosion
+SndID_DrownWarning	sfx_ptr_entry	SFX_DrownWarning
+SndID_BossExplosion	sfx_ptr_entry	SFX_BossExplosion
 SndID_TallyEnd		sfx_ptr_entry	SFX_TallyEnd
 SndID_RingSpill		sfx_ptr_entry	SFX_RingSpill
 SndID_Spring		sfx_ptr_entry	SFX_Spring
@@ -154,6 +161,11 @@ SFX_SpikesMove:		include "Sound/SFX/B6 - Spikes Move.asm"
 SFX_Smash:		include "Sound/SFX/B9 - Smash.asm"
 SFX_SpindashRelease:	include "Sound/SFX/BC - Spin Dash Release.asm"
 SFX_Roll:		include "Sound/SFX/BE - Roll.asm"
+SFX_ContinueJingle:	include "Sound/SFX/BF - Continue Jingle.asm"
+SFX_CasinoBonus:	include "Sound/SFX/C0 - Casino Bonus.asm"
+SFX_Explosion:		include "Sound/SFX/C1 - Explosion.asm"
+SFX_DrownWarning:	include "Sound/SFX/C2 - Water Warning.asm"
+SFX_BossExplosion:	include "Sound/SFX/C4 - Boss Explosion.asm"
 SFX_TallyEnd:		include "Sound/SFX/C5 - Tally End.asm"
 SFX_RingSpill:		include "Sound/SFX/C6 - Ring Spill.asm"
 SFX_Spring:		include "Sound/SFX/CC - Spring.asm"

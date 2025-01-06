@@ -187,7 +187,9 @@ ObjPlayer_Water:
 		beq.s	.End				; If a splash doesn't need to be created, branch
 
 		;playsnd	#sSplash, 2			; Play splash sound
-		rts
+		move.b	#SndID_Splash,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .NotInWater:
 		bclr	#6,_objStatus(a0)			; Clear "in water" flag
@@ -207,7 +209,9 @@ ObjPlayer_Water:
 
 .PlaySplashSnd:
 		;playsnd	#sSplash, 2			; Play splash sound
-		rts
+		move.b	#SndID_Splash,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Do Sonic's modes
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -574,7 +578,9 @@ ObjPlayer_MoveLeft:
 		move.b	#$D,_objAnim(a0)			; Set animation to skidding
 		bclr	#0,_objStatus(a0)			; Clear flip flag
 		;playsnd	#sSkid, 2			; Play skid sound
-		rts
+		move.b	#SndID_Skidding,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Move right on the ground
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -622,7 +628,9 @@ ObjPlayer_MoveRight:
 		move.b	#$D,_objAnim(a0)			; Set animation to skidding
 		bset	#0,_objStatus(a0)			; Set flip flag
 		;playsnd	#sSkid, 2			; Play skid sound
-		rts
+		move.b	#SndID_Skidding,d0
+		jmp	SOUND_PlaySFX
+		;rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Do movement while rolling
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -896,6 +904,8 @@ ObjPlayer_Peelout:
 
 .SetAni:
 		;playsnd	#sCharge, 2			; Play charge sound
+		move.b	#SndID_SpindashRev,d0
+		jsr	SOUND_PlaySFX
 
 		addq.l	#4,sp				; Don't return to caller
 		st	_objDashFlag(a0)			; Set the peelout flag
@@ -922,6 +932,8 @@ ObjPlayer_Peelout:
 
 .FinishDash:
 		;playsnd	#sChargeRelease, 2		; Play charge release sound
+		move.b	#SndID_SpindashRelease,d0
+		jsr	SOUND_PlaySFX
 
 		bra.s	.DoUpdates			; Continue
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -984,6 +996,8 @@ ObjPlayer_Spindash:
 		move.b	#2,_objAnim(a0)			; Set to spin animation
 
 		;playsnd	#sCharge, 2			; Play charge sound
+		move.b	#SndID_SpindashRev,d0
+		jsr	SOUND_PlaySFX
 
 		addq.l	#4,sp				; Don't return to caller
 		move.b	#1,_objDashFlag(a0)		; Set the spindash flag
@@ -1010,6 +1024,8 @@ ObjPlayer_Spindash:
 
 .FinishDash:
 		;playsnd	#sChargeRelease, 2		; Play charge release sound
+		move.b	#SndID_SpindashRelease,d0
+		jsr	SOUND_PlaySFX
 
 		bra.s	.DoUpdates			; Continue
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1088,6 +1104,8 @@ ObjPlayer_ChkJump:
 		addq.w	#4,sp				; Do not return to collaer
 		st	_objJumping(a0)			; Set the jumping flag
 		;playsnd	#sLeap, 2			; Play jump sound
+		move.b	#SndID_Jump,d0
+		jsr	SOUND_PlaySFX
 		move.b	#$E,_objColH(a0)			; Reduce Sonic's hitbox
 		move.b	#7,_objColW(a0)			; ''
 		addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
@@ -1348,6 +1366,8 @@ ObjPlayer_ChkBounce:
 		clr.b	_objDashFlag(a0)			; Reset dash flag
 
 		;playsnd	#sFloorBounce, 2		; Play the floor bounce sound
+		move.b	#SndID_LargeBumper,d0
+		jsr	SOUND_PlaySFX
 
 		btst	#2,_objStatus(a0)			; Is Sonic already rolling?
 		bne.s	.End				; If so, branch
@@ -1401,6 +1421,8 @@ ObjPlayer_ChkBounce:
 		clr.b	_objDashFlag(a0)			; Reset dash flag
 
 		;playsnd	#sFloorBounce, 2		; Play the floor bounce sound
+		move.b	#SndID_LargeBumper,d0
+		jsr	SOUND_PlaySFX
 
 		btst	#2,_objStatus(a0)			; Is Sonic already rolling?
 		bne.s	.End2				; If so, branch
@@ -1568,6 +1590,8 @@ ObjPlayer_GetHurt:
 	;	cmpi.l	#ObjSpike,_objAddress(a2)		; Did Sonic hit a spike?
 	;	beq.s	.End				; If not, branch
 		;playsnd	#sHurt, 2			; Play hurt sound
+		move.b	#SndID_Hurt,d0
+		jsr	SOUND_PlaySFX
 
 .End:
 		moveq	#-1,d0				; Set return status
@@ -1647,6 +1671,8 @@ ObjPlayer_GetKilled:
 	;	cmpi.l	#ObjSpike,_objAddress(a2)		; Did Sonic hit a spike?
 	;	beq.s	.End				; If not, branch
 		;playsnd	#sDeath,2			; Play death sound
+		move.b	#SndID_Hurt,d0
+		jsr	SOUND_PlaySFX
 
 .End:
 		moveq	#-1,d0				; Set return status
