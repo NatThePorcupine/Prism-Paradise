@@ -11,7 +11,7 @@
 ;	d0.l	- Pseudo-random number
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 MATH_GetRandom:
-		move.l	(randomSeed).w,d1		; Load the value of the previous random seed
+		move.l	(randomSeed).w,d0		; Load the value of the previous random seed
 		beq.s	.initSeed			; If the seed value is zero (uninitialized), branch ahead
 
 		add.l	d0,d0				; Otherwise, double the current value seed value
