@@ -15,7 +15,7 @@ EnableSpindash = 1
 S2PSGEnvelopes = 0
 S2DACSamples = 0
 
-	include	"Driver/Definition Macros (Z80).asm"
+	include	"Sound/Driver/Definition Macros (Z80).asm"
 
 ; ---------------------------------------------------------------------------
 ; NOTES:
@@ -3546,143 +3546,8 @@ byte_11E5:
 
 zPlaylistDefinitions:
 	phase zPlaylistDefinitions
-	include "Driver/Driver Definitions.asm"
+	include "Sound/Driver/Driver Definitions.asm"
 	dephase
-
- if 0
-
-zmakePlaylistEntry macro addr,val
-	if "val"==""
-		db	zmake68kBank(addr)|80h	; enable PAL mode
-	else
-		db	zmake68kBank(addr)	; disable PAL mode
-	endif
-	dw	zmake68kPtr(addr)
-    endm
-
-; zbyte_11F5h:
-zMasterPlaylist:
-ptr_mus81:	zmakePlaylistEntry Mus_GHZ
-ptr_mus82:	zmakePlaylistEntry Mus_LZ
-ptr_mus83:	zmakePlaylistEntry Mus_MZ
-ptr_mus84:	zmakePlaylistEntry Mus_SLZ
-ptr_mus85:	zmakePlaylistEntry Mus_SYZ
-ptr_mus86:	zmakePlaylistEntry Mus_SBZ
-ptr_mus87:	zmakePlaylistEntry Mus_Invincible
-ptr_mus88:	zmakePlaylistEntry Mus_ExtraLife
-ptr_mus89:	zmakePlaylistEntry Mus_SS
-ptr_mus8A:	zmakePlaylistEntry Mus_Title
-ptr_mus8B:	zmakePlaylistEntry Mus_Ending,1
-ptr_mus8C:	zmakePlaylistEntry Mus_Boss
-ptr_mus8D:	zmakePlaylistEntry Mus_FZ
-ptr_mus8E:	zmakePlaylistEntry Mus_GotThrough
-ptr_mus8F:	zmakePlaylistEntry Mus_GameOver,1
-ptr_mus90:	zmakePlaylistEntry Mus_Continue
-ptr_mus91:	zmakePlaylistEntry Mus_Credits,1
-ptr_mus92:	zmakePlaylistEntry Mus_Drowning,1
-ptr_mus93:	zmakePlaylistEntry Mus_Emerald
-zMusIDPtr__End:
-
-zs1TempotoS2 function n,((((conv0To256(n)-1)<<8)+(conv0To256(n)>>1))/conv0To256(n))&0FFh
-zs2TempotoS3 function n,(100h-((n==0)|n))&0FFh
-zs1TempotoS3 function n,zs2TempotoS3(zs1TempotoS2(n))
-
-; Tempo with speed shoe tempo for each song
-;zbyte_1214
-;zSpedUpTempoTable:
-;	db	zs1TempotoS3( 07h)	; 81 - GHZ
-;	db	zs1TempotoS3( 72h)	; 82 - LZ
-;	db	zs1TempotoS3( 73h)	; 83 - MZ
-;	db	zs1TempotoS3( 26h)	; 84 - SLZ
-;	db	zs1TempotoS3( 15h)	; 85 - SYZ
-;	db	zs1TempotoS3( 08h)	; 86 - SBZ
-;	db	zs1TempotoS3(0FFh)	; 87 - Invincible
-;	db	zs1TempotoS3( 05h)	; 88 - Extra Life
-					; 89 - Special Stage
-					; 8A - Title Screen
-					; 8B - Ending
-					; 8C - Boss
-					; 8D - Final Zone
-					; 8E - End of Act
-					; 8F - Game Over
-					; 90 - Continue
-					; 91 - Credits
-					; 92 - Drowning
-					; 93 - Emerald
-
-	; DAC sample pointers and lengths
-	ensure1byteoffset 1Ch
-
-;zDACPtr_Index:
-;zbyte_1233:
-zDACPtrTbl:
-zDACPtr_Sample1:	dw	zmake68kPtr(SndDAC_Sample1)
-;zbyte_1235
-zDACLenTbl:
-			dw	SndDAC_Sample1_End-SndDAC_Sample1
-
-zDACPtr_Sample2:	dw	zmake68kPtr(SndDAC_Sample2)
-			dw	SndDAC_Sample2_End-SndDAC_Sample2
-
-zDACPtr_Sample5:	dw	zmake68kPtr(SndDAC_Sample5)
-			dw	SndDAC_Sample5_End-SndDAC_Sample5
-
-zDACPtr_Sample3:	dw	zmake68kPtr(SndDAC_Sample3)
-			dw	SndDAC_Sample3_End-SndDAC_Sample3
-
-zDACPtr_Sample4:	dw	zmake68kPtr(SndDAC_Sample4)
-			dw	SndDAC_Sample4_End-SndDAC_Sample4
-
-zDACPtr_Sample6:	dw	zmake68kPtr(SndDAC_Sample6)
-			dw	SndDAC_Sample6_End-SndDAC_Sample6
-
-zDACPtr_Sample7:	dw	zmake68kPtr(SndDAC_Sample7)
-			dw	SndDAC_Sample7_End-SndDAC_Sample7
-
-	; something else for DAC sounds
-	; First byte selects one of the DAC samples.  The number that 
-	; follows it is a wait time between each nibble written to the DAC 
-	; (thus higher = slower)
-	ensure1byteoffset 22h
-; zbyte_124F:
-zDACMasterPlaylist:
-
-; DAC samples IDs
-offset :=	zDACPtrTbl
-ptrsize :=	2+2
-idstart :=	80h
-
-	db	id(zDACPtr_Sample1),6		; 81h
-	db	id(zDACPtr_Sample2),2		; 82h
-	db	id(zDACPtr_Sample5),0Ch		; 85h
-	db	id(zDACPtr_Sample5),5		; 88h
-	db	id(zDACPtr_Sample5),8		; 89h
-	db	id(zDACPtr_Sample5),0Ah		; 8Ah
-	db	id(zDACPtr_Sample5),0Eh		; 8Bh
-	db	id(zDACPtr_Sample3),6+2		; 83h
-	db	id(zDACPtr_Sample4),8+2		; 84h
-	db	id(zDACPtr_Sample6),0Ah+2	; 86h
-	db	id(zDACPtr_Sample7),1Bh+2	; 87h
-	db	id(zDACPtr_Sample6),2+2		; 8Ch
-	db	id(zDACPtr_Sample6),5+2		; 8Dh
-	db	id(zDACPtr_Sample6),8+2		; 8Eh
-	db	id(zDACPtr_Sample7),8+2		; 8Fh
-	db	id(zDACPtr_Sample7),0Bh+2	; 90h
-	db	id(zDACPtr_Sample7),12h+2	; 91h
-
-	ensure1byteoffset 7
-zDACBanks:
-	db zmake68kBank(SndDAC_Sample1)
-	db zmake68kBank(SndDAC_Sample2)
-	db zmake68kBank(SndDAC_Sample5)
-	db zmake68kBank(SndDAC_Sample3)
-	db zmake68kBank(SndDAC_Sample4)
-	db zmake68kBank(SndDAC_Sample6)
-	db zmake68kBank(SndDAC_Sample7)
-
- endif
-; ---------------------------------------------------------------------------
-	; space for a few global variables
 
 
 

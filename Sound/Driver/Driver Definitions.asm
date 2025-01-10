@@ -71,8 +71,12 @@ CmdID__First: 	equ	0FBh
 CmdID__End:	equ	100h
 SndID__First:	equ	MusID__End
 SndID__End:	equ	CmdID__First
+FlgID_Pause:	equ	7Fh
+FlgID_Unpause:	equ	80h
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Shared Symbols
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-	shared	zStreamOutput, zQueueToPlay, zSFXToPlay, zSFXStereoToPlay, zSFXUnknown
+	shared	zStreamOutput							; Labels
+	shared	zQueueToPlay, zSFXToPlay, zSFXStereoToPlay, zSFXUnknown		; Sound Queue Variables
+	shared	zAbsVar.StopMusic						; Additional Communication Variables
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------

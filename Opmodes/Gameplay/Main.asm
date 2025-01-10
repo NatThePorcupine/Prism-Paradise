@@ -224,6 +224,9 @@ CheckPause:
 		st	pauseFlag.w			; Pause the game
 ;		AMPS_MUSPAUSE				; Pause the music
 
+		move.b	#FlgID_Pause,d0
+		jsr	SOUND_PausePlayback
+
 .PauseLoop:
 		move.b	#vGeneral,vIntRoutine.w		; General V-INT routine
 		bsr.w	VSync_Routine			; V-SYNC
@@ -231,6 +234,9 @@ CheckPause:
 		beq.s	.PauseLoop			; If not, branch
 
 ;		AMPS_MUSUNPAUSE				; Unpause the music
+		move.b	#FlgID_Unpause,d0
+		jsr	SOUND_PausePlayback
+
 		clr.b	pauseFlag.w			; Unpause the game
 
 .End:
