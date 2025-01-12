@@ -681,8 +681,8 @@ Level_LoadObjs_Forward:
 		cmp.w	(a0),d6				; Check if the last obhect is in range
 		bls.s	.EndLoadRst			; If not, branch
 		bsr.w	Level_LoadObject		; Attempt to spawn the object
-		beq.s	.EndLoad			; If it failed to, branch
 		addq.w	#1,a3				; Get acutal respawn table address
+		beq.s	.EndLoad			; If it failed to, branch
 		bra.s	.LoadLoop
 
 .EndLoadRst:
