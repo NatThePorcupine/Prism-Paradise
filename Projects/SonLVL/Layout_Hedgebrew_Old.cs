@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
 
-namespace SonicRetro.SonLVL.API.S1D
+namespace SonicRetro.SonLVL.API.S3K
 {
 	public class Layout : LayoutFormatSeparate
 	{	
 		// Internal Read Generic Layout
 		private void ReadLayoutInternal(byte[] rawdata, ref ushort[,] layout)
 		{
-			int width = ByteConverter.ToUInt16(rawdata, 0) + 1;
-			int height = ByteConverter.ToUInt16(rawdata, 2) + 1;
+			int width = rawdata[0] + 1;
+			int height = rawdata[1] + 1;
 			layout = new ushort[width, height];
 			
 			for (int row = 0; row < height; row++)
 			{
-				ushort ptr = ByteConverter.ToUInt16(rawdata, 4 + (row * 2));
+				ushort ptr = ByteConverter.ToUInt16(rawdata, 2 + (row * 2));
 				if (ptr != 0)
 					for (int col = 0; col < width; col++)
-						layout[col, row] = ByteConverter.ToUInt16(rawdata, ptr + (col *2));
+						layout[col, row] = rawdata[ptr + col];
 			}
 		}
 
@@ -40,19 +40,19 @@ namespace SonicRetro.SonLVL.API.S1D
 			
 			int width = layout.GetLength(0);
 			int height = layout.GetLength(1);
-			tmp.AddRange(ByteConverter.GetBytes((ushort)(width - 1)));
-			tmp.AddRange(ByteConverter.GetBytes((ushort)(height - 1)));
+			tmp.Add((byte)(width - 1));
+			tmp.Add((byte)(height - 1));
 			
 			// Layout Pointers
 			for (int row = 0; row < height; row++)
 			{
-				tmp.AddRange(ByteConverter.GetBytes((ushort)(4 + (height * 2) + (row * width * 2))));
+				tmp.AddRange(ByteConverter.GetBytes((ushort)(2 + (height * 2) + (row * width))));
 			}
 
 			// Layout Data
 			for (int row = 0; row < height; row++)
 				for (int col = 0; col < width; col++)
-					tmp.AddRange(ByteConverter.GetBytes((ushort)(layout[col, row])));
+					tmp.Add((byte)layout[col, row]);
 
 			rawdata = tmp.ToArray();
 		}
@@ -71,9 +71,9 @@ namespace SonicRetro.SonLVL.API.S1D
 
 		public override bool IsResizable { get { return true; } }
 
-		public override System.Drawing.Size MaxSize { get { return new System.Drawing.Size(512, 512); } }
+		public override System.Drawing.Size MaxSize { get { return new System.Drawing.Size(256, 256); } }
 
-		public override System.Drawing.Size DefaultSize { get { return new System.Drawing.Size(256, 32); } }
+		public override System.Drawing.Size DefaultSize { get { return new System.Drawing.Size(128, 16); } }
 
 		public override int MaxBytes { get { return 32768; } }
     }
