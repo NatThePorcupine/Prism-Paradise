@@ -190,7 +190,7 @@ stack		rs.b	0				; ''
 ; Level variables
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		rsset	opmodeVars
-blockData	rs.b	$1800				; Block table
+blockData	rs.b	$2000				; Block table
 
 ringStatus	rs.b	$400				; Ring status table
 ringStatus_End	rs.b	0				; ''
@@ -290,7 +290,7 @@ angleValPtr	rs.l	1				; Angle value array pointer
 normColArrayPtr	rs.l	1				; Normal height map array pointer
 rotColArrayPtr	rs.l	1				; Rotated height map array pointer
 
-got_objNextLvl	rs.b	1				; Flag to go to the next level
+gotoNextLvl	rs.b	1				; Flag to go to the next level
 bossDefeated	rs.b	1
 
 lvlHasWater	rs.b	1				; Water in level flag
