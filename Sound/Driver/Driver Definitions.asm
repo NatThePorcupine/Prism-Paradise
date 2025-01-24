@@ -6,7 +6,7 @@
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 zMasterPlaylist:	rsset 1
 MusID__First:		equ __rs
-MusID_MTZ:		music_entry MUSIC_MTZ
+MusID_HPZ:		music_entry MUSIC_HPZ
 MusID_Invincible:	music_entry MUSIC_Invincible
 MusID_ExtraLife:	music_entry MUSIC_ExtraLife
 MusID_Boss:		music_entry MUSIC_Boss

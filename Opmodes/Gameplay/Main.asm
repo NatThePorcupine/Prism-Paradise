@@ -252,7 +252,7 @@ CheckPause:
 ; Music IDs
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_MusicIDs:
-		dc.b	MusID_MTZ, MusID_MTZ
+		dc.b	MusID_HPZ, MusID_HPZ
 		dc.b	-1, -1
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Level water heights (-1 for no water)
@@ -269,21 +269,21 @@ Level_WatelevelIDs:
 ;	dc.l	OBJECTS, RINGS, COLLISION
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_DataPointers:
-		dc.l	WWZ_Chunks, WWZ_Blocks, WWZ_Tiles, WWZ_Pal
-		dc.l	WWZ_FGLayout, WWZ_BGLayout
-		dc.l	WWZ_Objects, WWZ_Rings, WWZ_Collision
+		dc.l	HPZ_Chunks, HPZ_Blocks, HPZ_Tiles, HPZ_Pal
+		dc.l	HPZ_FGLayout, HPZ_BGLayout
+		dc.l	HPZ_Objects, HPZ_Rings, HPZ_Collision
 
-		dc.l	WWZ_Chunks, WWZ_Blocks, WWZ_Tiles, WWZ_Pal
-		dc.l	WWZ_FGLayout, WWZ_BGLayout
-		dc.l	WWZ_Objects, WWZ_Rings, WWZ_Collision
+		dc.l	HPZ_Chunks, HPZ_Blocks, HPZ_Tiles, HPZ_Pal
+		dc.l	HPZ_FGLayout, HPZ_BGLayout
+		dc.l	HPZ_Objects, HPZ_Rings, HPZ_Collision
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Size and start position data
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_SizeStartPos:
 		dc.w	$3000, $580
-		incbin	"Zones/Wacky Workbench/Start Position.bin"
+		incbin	"Zones/Hidden Palace/Start Position.bin"
 		dc.w	$3000, $580
-		incbin	"Zones/Wacky Workbench/Start Position.bin"
+		incbin	"Zones/Hidden Palace/Start Position.bin"
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Dynamic events routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -378,20 +378,22 @@ Level_AniArtRouts:
 ; Wacky Workbench animated art routine
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 AniArt_WWZ:
-		lea	.AniData(pc),a2			; Tutorial animated art data
-		bra.w	AniArt_D_objAnimmate		; Handle animations
+		rts
+
+;		lea	.AniData(pc),a2			; Tutorial animated art data
+;		bra.w	AniArt_D_objAnimmate		; Handle animations
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-.AniData:
-		dc.w	2
-
-		lvlAniDat 3, ArtUnc_Electricity, $162, 4, 8
-		dc.b	0, 8, $10, $18
-
-		lvlAniDat 1, ArtUnc_ElectricOrbs, $15E, $E, 4
-		dc.b	0, 4, 4, 0, 4, 4, 8, 4, 4, 8, $C, 4, 4, $C
-
-		lvlAniDat 4, ArtUnc_Sirens, $A8, 8, 4
-		dc.b	0, 4, 4, 8, $C, $C, $C, $C
+;.AniData:
+;		dc.w	2
+;
+;		lvlAniDat 3, ArtUnc_Electricity, $162, 4, 8
+;		dc.b	0, 8, $10, $18
+;
+;		lvlAniDat 1, ArtUnc_ElectricOrbs, $15E, $E, 4
+;		dc.b	0, 4, 4, 0, 4, 4, 8, 4, 4, 8, $C, 4, 4, $C
+;
+;		lvlAniDat 4, ArtUnc_Sirens, $A8, 8, 4
+;		dc.b	0, 4, 4, 8, $C, $C, $C, $C
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Level drawing initialization and update routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------

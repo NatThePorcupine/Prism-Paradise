@@ -76,9 +76,7 @@ Level_LoadData:
 		lsr.w	#2,d0				; ''
 		lea	(a3,d0.w),a3			; Get pointer to the correct pointers
 
-		movea.l	(a3)+,a0			; Get chunk data pointer
-		lea	chunkData,a1			; Decompress into chunk table
-		jsr	KosDec.w			; ''
+		move.l	(a3)+,(chunkDataPtr).w		; Get chunk data pointer
 
 		movea.l	(a3)+,a0			; Get block data pointer
 		lea	blockData.w,a1			; Decompress into block table
@@ -92,8 +90,14 @@ Level_LoadData:
 		move.w	(a0)+,d0			; Size of palette data
 		jsr	LoadTargetPal.w			; Load the palette
 
-		move.l	(a3)+,lvlLayoutFG.w		; Move layout addresses to variables
-		move.l	(a3)+,lvlLayoutBG.w
+		lea	(lvlLayoutBuff).l,a1		; Load the level layout buffer as the decompression destination
+		movea.l	(a3)+,a0			; Set the foreground layout file as the decompression source
+		move.l	a1,(lvlLayoutFG).w		; Save the foreground layout address
+		jsr	KosDec.w			; Initiate foreground layout decompression
+
+		movea.l	(a3)+,a0			; Set the background layout file as the decompression source
+		move.l	a1,(lvlLayoutBG).w		; Save the background layout address (picks up right where the foreground layout ended)
+		jsr	KosDec.w			; Initiate background layout decompression
 
 		move.l	(a3)+,objMgrLayout.w		; Set object position data pointer
 		move.l	(a3)+,ringMgrLayout.w		; Set ring position data pointer

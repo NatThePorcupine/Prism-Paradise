@@ -387,11 +387,12 @@ calcHiVDP	macro
 ;	a6.l	- Pointer in chunk data to the correct block
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 getChunk	macro
-		moveq	#-1,d1				; Prepare chunk pointer
-		move.b	(a2,d0.w),d1			; Get chunk ID
-		andi.w	#$FF,d1				; ''
-		lsl.w	#7,d1				; Turn into offset
-		movea.l	d1,a6				; Store into a6
+		move.w	(a2,d0.w),d1			; Get chunk ID
+		andi.l	#$3FFF,d1			; ''
+		lsl.l	#5,d1				; Turn into offset by multiplying by 32 (number of bytes each chunk entry occupies)
+
+		movea.l	(chunkDataPtr).w,a6		; Load base address of uncompressed chunk data in ROM
+		adda.l	d1,a6				; Adjust by the offset of the current chunk ID
 		endm
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Get a block row and store it in a plane buffer
@@ -428,17 +429,18 @@ Level_GetRow:
 		
 		lsr.w	#3,d0				; Get X within chunk data
 		move.w	d0,d2				; ''
-		andi.w	#$E,d2				; ''
-		move.w	d1,d3				; Get Y within chunk data
-		andi.w	#$70,d3				; ''
+		andi.w	#6,d2				; ''
+		lsr.w	#1,d1				; Get Y within chunk data
+		move.w	d1,d3				; ''
+		andi.w	#$18,d3				; ''
 		add.w	d3,d2				; Combine X and Y to get chunk offset
 		
-		lsr.w	#4,d0				; Get X within layout data
-		andi.w	#$FF,d0				; ''
-		andi.w	#$780,d1			; Get Y within layout data
-		lsr.w	#6,d1				; ''
+		lsr.w	#2,d0				; Get X within layout data
+		andi.w	#$3FE,d0			; ''
+		lsr.w	#4,d1				; Get Y within layout data
+		andi.w	#$3FE,d1			; ''
 
-		add.w	2(a2,d1.w),d0			; Combine X and Y to get layout offset
+		add.w	4(a2,d1.w),d0			; Combine X and Y to get layout offset
 		getChunk				; Get chunk pointer at current location
 
 .DrawBlock_Loop:
@@ -469,10 +471,10 @@ Level_GetRow:
 		move.l	d5,(a5)+			; ''
 
 		addq.w	#2,d2				; Go to the next block
-		andi.w	#$E,d2				; Have we gone outside of the chunk?
+		andi.w	#6,d2				; Have we gone outside of the chunk?
 		bne.s	.DrawBlock_Cont			; If not, branch
 		
-		addq.w	#1,d0				; Next chunk
+		addq.w	#2,d0				; Next chunk
 		getChunk				; ''
 
 .DrawBlock_Cont:
@@ -494,6 +496,7 @@ Level_GetRow:
 ;	Nothing
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_GetCol:
+
 		lea	lvlLayout.w,a2			; Get level layout pointer address
 		adda.w	cLayout(a1),a2			; Add camera offset value
 		movea.l	(a2),a2				; Load address stored within the pointer
@@ -515,18 +518,19 @@ Level_GetCol:
 
 		lsr.w	#3,d0				; Get X within chunk data
 		move.w	d0,d2				; ''
-		andi.w	#$E,d2				; ''
-		move.w	d1,d3				; Get Y within chunk data
-		andi.w	#$70,d3				; ''
+		andi.w	#6,d2				; ''
+		lsr.w	#1,d1				; Get Y within chunk data
+		move.w	d1,d3				; ''
+		andi.w	#$18,d3				; ''
 		add.w	d2,d3				; Combine X and Y to get chunk offset
 
-		lsr.w	#4,d0				; Get X within layout data
-		andi.w	#$FF,d0				; ''
-		andi.w	#$780,d1			; Get Y within layout data
-		lsr.w	#6,d1				; ''				
+		lsr.w	#2,d0				; Get X within layout data
+		andi.w	#$3FE,d0			; ''
+		lsr.w	#4,d1				; Get Y within layout data
+		andi.w	#$3FE,d1			; ''
 		movem.w	d0-d1,-(sp)			; Backup layout X and Y 
 		
-		add.w	2(a2,d1.w),d0			; Combine X and Y to get layout offset
+		add.w	4(a2,d1.w),d0			; Combine X and Y to get layout offset
 		getChunk				; Get chunk pointer at current location
 
 .DrawBlock_Loop:
@@ -534,7 +538,7 @@ Level_GetCol:
 		move.w	d5,d6				; ''
 		andi.w	#$3FF,d5			; Mask off flip bits
 		lsl.w	#3,d5				; Get offset in block data
-		
+	
 		move.w	d5,d7				; Get block tiles
 		move.l	2(a4,d7.w),d5			; ''
 		move.w	d7,d5				; ''
@@ -560,15 +564,15 @@ Level_GetCol:
 		move.l	d7,(a3)+			; Save the tiles in the plane buffers
 		move.l	d5,(a5)+			; ''
 
-		addi.w	#$10,d3				; Go to the next block
-		andi.w	#$70,d3				; Have we gone outside of the chunk?
+		addq.w	#8,d3				; Go to the next block
+		andi.w	#$18,d3				; Have we gone outside of the chunk?
 		bne.s	.DrawBlock_Cont			; If not, branch
 
 		movem.w	(sp)+,d0-d1			; Get saved layout X and Y from the stack
 		addq.w	#2,d1				; Increase layout data Y offset to the next pointer
 		movem.w	d0-d1,-(sp)			; Push a backup copy back onto the stack
 		
-		add.w	2(a2,d1.w),d0			; Next chunk
+		add.w	4(a2,d1.w),d0			; Next chunk
 		getChunk				; ''
 
 .DrawBlock_Cont:

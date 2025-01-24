@@ -202,7 +202,7 @@ SFX_Flipper:		include "Sound/SFX/E3 - Flipper.asm"
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 SOUND_MusicBank:	start_bank
 
-MUSIC_MTZ:		include	"Sound/Music/Metropolis Zone.asm"
+MUSIC_HPZ:		include	"Sound/Music/Hidden Palace Zone.asm"
 MUSIC_Invincible:	include	"Sound/Music/Invincibility.asm"
 MUSIC_ExtraLife:	include	"Sound/Music/Extra Life.asm"
 MUSIC_Boss:		include	"Sound/Music/Boss.asm"

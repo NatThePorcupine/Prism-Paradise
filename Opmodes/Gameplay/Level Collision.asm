@@ -1394,41 +1394,62 @@ Level_FindWall2:
 ;	(a1).w	- The block ID in the chunk where the object is standing
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_FindBlock:
-		movea.l	lvlLayout.w,a1			; Get level layout pointer address
+	;	movea.l	(chunkDataPtr).w,a1
+	;	rts
 
-		move.w	d2,d0				; Get the object's Y position
-		andi.w	#$780,d0			; Get Y within layout data
-		lsr.w	#6,d0				; ''						
-		move.w	2(a1,d0.w),d0			; Get chunk row offset
-		
-		move.w	d3,d1				; Get the object's X position
-		lsr.w	#3,d1				; Divide by 8
-		move.w	d1,d4				; Save for later
-		
-		lsr.w	#4,d1				; Divide by 16 to get the offset of the chunk in the chunk row
-		andi.w	#$FF,d1				; Only 256 chunks per row
-		add.w	d1,d0				; Get offset in the level layout
+		movea.l	(lvlLayout).w,a1		; Get level layout pointer address
 
-		moveq	#-1,d1				; Prepare the chunk table pointer
-		clr.w	d1				; ''
-		
-		move.b	(a1,d0.w),d1			; Get chunk ID
-		add.w	d1,d1				; Turn into offset
-		move.w	.ChunkOffsets(pc,d1.w),d1	; Get offset in chunk table
-		move.w	d2,d0				; Get the object's Y position
-		
-		andi.w	#$70,d0				; Get Y position within chunk
-		add.w	d0,d1				; Add onto the offset
-		andi.w	#$E,d4				; Get the previously saved X position divided by 8 (for the row offset)
-		add.w	d4,d1				; Add onto the offset
-		
-		movea.l	d1,a1				; Get pointer in chunk table
+		move.w	d3,d0				; Get X within layout data
+		lsr.w	#5,d0				; ''
+		andi.w	#$3FE,d0			; ''
+		move.w	d2,d1				; Get Y within layout data
+		lsr.w	#5,d1				; ''
+		andi.w	#$3FE,d1			; ''
+
+		add.w	4(a1,d1.w),d0			; Combine X and Y to get layout offset
+		move.w	(a1,d0.w),d1			; Get chunk ID
+		andi.l	#$3FFF,d1			; ''
+		lsl.l	#5,d1				; Turn into offset by multiplying by 32 (number of bytes each chunk entry occupies)
+
+		movea.l	(chunkDataPtr).w,a1		; Load base address of uncompressed chunk data in ROM
+		adda.l	d1,a1				; Adjust by the offset of the current chunk ID
+
+		move.w	d3,d0				; Get X within chunk data
+		lsr.w	#3,d0				; ''
+		andi.w	#6,d0				; ''
+		move.w	d2,d1				; Get Y within chunk data
+		lsr.w	#1,d1				; ''			
+		andi.w	#$18,d1				; ''
+		add.w	d0,d1				; Combine X and Y to get chunk offset
+
+		adda.w	d1,a1				; Adjust by the offset of the block within the chunk
 		rts
+
+	;	move.w	d2,d0				; Get the object's Y position
+	;	andi.w	#$7FE0,d0			; Get Y within layout data
+	;	lsr.w	#4,d0				; ''			
+	;	move.w	4(a1,d0.w),d0			; Get chunk row offset
+	;	
+	;	move.w	d3,d1				; Get the object's X position
+	;	lsr.w	#3,d1				; Divide by 8
+	;	move.w	d1,d4				; Save for later
+	;	
+	;	lsr.w	#2,d1				; Divide by 4 
+	;	andi.w	#$3FE,d1			; logically AND against the maximum number of chunks per row * 2 (word alignment)
+	;	add.w	d1,d0				; Combine to get the offset into the level layout
+	;	
+	;	move.w	(a1,d0.w),d1			; Get chunk ID
+	;	andi.l	#$3FFF,d1			; ''
+	;	lsl.l	#5,d1				; Turn into offset by multiplying by 32 (number of bytes each chunk entry occupies)
+	;	
+	;	move.w	d2,d0				; Get the object's Y position
+	;	lsr.w	#1,d0				; Get Y position within chunk
+	;	andi.l	#$18,d0				; ''
+	;	or.l	d0,d1				; Combine with the offset
+	;	andi.l	#6,d4				; Get the previously saved X position divided by 8 (for the row offset)
+	;	or.l	d4,d1				; Combine with the offset
+	;	
+	;	movea.l	(chunkDataPtr).w,a1		; Load base address of uncompressed chunk data in ROM
+	;	lea	(a1,d1.l),a1			; Load the address of the current chunk ID's data
+	;	rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-.ChunkOffsets:
-c		= 0
-		rept	256
-			dc.w	c
-c			= c+$80
-		endr
-; =========================================================================================================================================================

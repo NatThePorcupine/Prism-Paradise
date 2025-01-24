@@ -9,7 +9,7 @@
 		; --- BUFFERS ---
 
 miscBuff	rs.b	0				; General buffer
-chunkData	rs.b	$8000				; Chunk table (uses same space as general buffer)
+lvlLayoutBuff	rs.b	$8000				; Buffer in RAM used to store the level layout data
 miscBuff_End	rs.b	0
 
 		rsset	RAM_WORD_START
@@ -206,9 +206,11 @@ scrollSects_End	rs.b	0				; ''
 collideList	rs.b	$80				; Collision response list
 collideList_End	rs.b	0				; ''
 
-lvlLayout	rs.b	0				; Level layout ROM addresses
+lvlLayout	rs.b	0				; Level layout addresses
 lvlLayoutFG	rs.l	1				
-lvlLayoutBG	rs.l	1				
+lvlLayoutBG	rs.l	1
+
+chunkDataPtr	rs.l	1
 
 ringCount	rs.w	1				; Ring count
 ringAnimFrame	rs.b	1				; Ring animation frame

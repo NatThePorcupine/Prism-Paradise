@@ -187,57 +187,102 @@ ArtUnc_HUDNumbers:
 ; Level data
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench Zone
+;
+;WWZ_FGLayout:
+;		incbin	"Zones/Wacky Workbench/Foreground.lvl"
+;		even
+;WWZ_BGLayout:
+;		incbin	"Zones/Wacky Workbench/Background.lvl"
+;		even
 
-WWZ_FGLayout:
-		incbin	"Zones/Wacky Workbench/Foreground.lvl"
+;		dc.w	$FFFF, 0, 0				; Null object list entry
+;WWZ_Objects:
+;		incbin	"Zones/Wacky Workbench/Objects.bin"
+;		even
+;WWZ_Rings:
+;		incbin	"Zones/Wacky Workbench/Rings.bin"
+;		even
+;WWZ_Collision:
+;		dc.l	.ColData, .Angles, .Heights, .HeightsR
+;.ColData:
+;		incbin	"Zones/Wacky Workbench/Collision.bin"
+;		even
+;.Angles:
+;		incbin	"Zones/Wacky Workbench/Angle Values.bin"
+;		even
+;.Heights:
+;		incbin	"Zones/Wacky Workbench/Height Values.bin"
+;		even
+;.HeightsR:
+;		incbin	"Zones/Wacky Workbench/Height Values (Rotated).bin"
+;		even
+;WWZ_Chunks:
+;		incbin	"Zones/Wacky Workbench/Chunks.bin"
+;		even
+;WWZ_Blocks:
+;		incbin	"Zones/Wacky Workbench/Blocks.bin"
+;		even
+;WWZ_Pal:
+;		dc.w	$100>>1-1
+;		incbin	"Graphics/Palettes/Wacky Workbench/Normal.pal"
+;		incbin	"Graphics/Palettes/Wacky Workbench/Water.pal"
+;		even
+;WWZ_Tiles:
+;		incbin	"Graphics/Tilesets/Wacky Workbench/Tiles.kosm"
+;		even
+;ArtUnc_Electricity:
+;		incbin	"Graphics/Tilesets/Wacky Workbench/Electricity.unc"
+;		even
+;ArtUnc_ElectricOrbs:
+;		incbin	"Graphics/Tilesets/Wacky Workbench/Electric Orbs.unc"
+;		even
+;ArtUnc_Sirens:
+;		incbin	"Graphics/Tilesets/Wacky Workbench/Sirens.unc"
+;		even
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Hidden Palace Zone
+
+HPZ_FGLayout:
+		incbin	"Zones/Hidden Palace/Foreground.kos"
 		even
-WWZ_BGLayout:
-		incbin	"Zones/Wacky Workbench/Background.lvl"
+HPZ_BGLayout:
+		incbin	"Zones/Hidden Palace/Background.kos"
 		even
 
 		dc.w	$FFFF, 0, 0				; Null object list entry
-WWZ_Objects:
-		incbin	"Zones/Wacky Workbench/Objects.bin"
+HPZ_Objects:
+		incbin	"Zones/Hidden Palace/Objects.bin"
 		even
-WWZ_Rings:
-		incbin	"Zones/Wacky Workbench/Rings.bin"
+HPZ_Rings:
+		incbin	"Zones/Hidden Palace/Rings.bin"
 		even
-WWZ_Collision:
+HPZ_Collision:
 		dc.l	.ColData, .Angles, .Heights, .HeightsR
 .ColData:
-		incbin	"Zones/Wacky Workbench/Collision.bin"
+		incbin	"Zones/Hidden Palace/Collision.bin"
 		even
 .Angles:
-		incbin	"Zones/Wacky Workbench/Angle Values.bin"
+		incbin	"Zones/Hidden Palace/Angle Values.bin"
 		even
 .Heights:
-		incbin	"Zones/Wacky Workbench/Height Values.bin"
+		incbin	"Zones/Hidden Palace/Height Values.bin"
 		even
 .HeightsR:
-		incbin	"Zones/Wacky Workbench/Height Values (Rotated).bin"
+		incbin	"Zones/Hidden Palace/Height Values (Rotated).bin"
 		even
-WWZ_Chunks:
-		incbin	"Zones/Wacky Workbench/Chunks.bin"
+HPZ_Chunks:
+		incbin	"Zones/Hidden Palace/Chunks.bin"
 		even
-WWZ_Blocks:
-		incbin	"Zones/Wacky Workbench/Blocks.bin"
+HPZ_Blocks:
+		incbin	"Zones/Hidden Palace/Blocks.bin"
 		even
-WWZ_Pal:
+HPZ_Pal:
 		dc.w	$100>>1-1
-		incbin	"Graphics/Palettes/Wacky Workbench/Normal.pal"
-		incbin	"Graphics/Palettes/Wacky Workbench/Water.pal"
+		incbin	"Graphics/Palettes/Hidden Palace/Normal.pal"
+		incbin	"Graphics/Palettes/Hidden Palace/Water.pal"
 		even
-WWZ_Tiles:
-		incbin	"Graphics/Tilesets/Wacky Workbench/Tiles.kosm"
-		even
-ArtUnc_Electricity:
-		incbin	"Graphics/Tilesets/Wacky Workbench/Electricity.unc"
-		even
-ArtUnc_ElectricOrbs:
-		incbin	"Graphics/Tilesets/Wacky Workbench/Electric Orbs.unc"
-		even
-ArtUnc_Sirens:
-		incbin	"Graphics/Tilesets/Wacky Workbench/Sirens.unc"
+HPZ_Tiles:
+		incbin	"Graphics/Tilesets/Hidden Palace/Tiles.kosm"
 		even
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
