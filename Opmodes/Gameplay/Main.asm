@@ -280,94 +280,75 @@ Level_DataPointers:
 ; Size and start position data
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_SizeStartPos:
-		dc.w	$3000, $580
+		dc.w	$3600, $800
 		incbin	"Zones/Hidden Palace/Start Position.bin"
-		dc.w	$3000, $580
+		dc.w	$3600, $800
 		incbin	"Zones/Hidden Palace/Start Position.bin"
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Dynamic events routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_DynEvenRouts:
-		dc.l	DynEv_WWZ			; Wacky Workbench
-		dc.l	DynEv_WWZ
+		dc.l	DynEv_HPZ			; Hidden Palace
+		dc.l	DynEv_HPZ
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench dynamic events routine
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-DynEv_WWZ:
+DynEv_HPZ:
 		moveq	#0,d0
-		move.b	dynEventRout.w,d0
-		move.w	.Index(pc,d0.w),d0
-		jmp	.Index(pc,d0.w)
+		move.b	(dynEventRout).w,d0
+		move.w	.index(pc,d0.w),d0
+		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-.Index:
-		dc.w	.WaitBoss-.Index
-		dc.w	.Done-.Index
+.index:
+		dc.w	.init-.index
+		dc.w	.null-.index
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-.WaitBoss:
-		cmpi.w	#$2EE0,fgCamXPos.w
-		blt.s	.Done
-		move.w	#$340,minCamYPos.w
-		move.w	#$340,targetMaxCamY.w
-		move.w	#$2EE0,minCamXPos.w
-		move.w	#$2EE0,maxCamXPos.w
+.init:
+		move.w	#0,minCamYPos.w
+		move.w	#$700,targetMaxCamY.w
+		move.w	#0,minCamXPos.w
+		move.w	#$34C0,maxCamXPos.w
 		addq.b	#2,dynEventRout.w
-
-.Done:
+;
+.null:
 		rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Palette cycle routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_PalCycRouts:
-		dc.l	PalCycle_WWZ			; Wacky Workbench
-		dc.l	PalCycle_WWZ
+		dc.l	PalCycle_HPZ				; Hidden Palace
+		dc.l	PalCycle_HPZ
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-; Wacky Workbench palette cycle routine
+; Hidden Palace palette cycle routine
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-PalCycle_WWZ:
-		tst.b	rFlooactIDive.w		; Is the floor active?
-		bne.s	.Flash				; If so, branch
+PalCycle_HPZ:
+		subq.b	#1,(palCycTimer).w			; Decrement the palette cycle timer.
+		bpl.s	.end					; If the timer hasn't expired, return.
+		move.b	#4,(palCycTimer).w			; Otherwise, reset the timer.
 
-		subq.w	#1,rFloorTimer.w		; Decrement the floor timer
-		bpl.s	.ResetPal			; If it hasn't run out, branch
-		st	rFlooactIDive.w		; Set the floor active flag
-		move.w	#180,rFloorTimer.w		; Set the floor timer
+		clr.w	d0					; Get the current palette cycle index.
+		move.b	(palCycIndex).w,d0			; ^
+		subq.b	#2,(palCycIndex).w			; Decrement the stored palette cycle index by two bytes.
+		bcc.s	.update					; If no underflow occurred, branch to palette update logic.
+		move.b	#6,(palCycIndex).w			; Otherwise, reset the index.
 
-.ResetPal:
-		clr.w	palCycTimer.w		; Reset the palette cycle
-		move.w	#$C28,(paletteBuff+$62).w		; Set the floor color to be deactivated
-		move.w	#$E48,(paletteBuffAlt+$62).w	; ''
-		rts
+.update:
+		lea	(paletteBuff+($20*3)+(2*9)).w,a0	; Load the destination address within the palette buffer.
+		move.l	PalCyc_HPZWaterfall(pc,d0.w),(a0)+	; Transfer the colors for this frame.
+		move.l	PalCyc_HPZWaterfall+4(pc,d0.w),(a0)	; ^
 
-.Flash:
-		subq.w	#1,rFloorTimer.w		; Decrement the floor timer
-		bpl.s	.UpdatePal			; If it hasn't run out, branch
-		clr.b	rFlooactIDive.w		; Clear the floor active flag
-		move.w	#30,rFloorTimer.w		; Set the floor timer
-
-.UpdatePal:
-		subq.b	#1,palCycTimer.w		; Decrement the palette cycle timer
-		bpl.s	.End				; If it hasn't run out, branch
-		move.b	#1,palCycTimer.w		; Reset the palette cycle timer
-
-		moveq	#0,d0
-		move.b	palCycIndex.w,d0		; Get the palette cycle index
-		add.w	d0,d0				; Turn into offset
-							; Set the floor color
-		move.w	PalCyc_WWZFloor(pc,d0.w),(paletteBuff+$62).w
-		move.w	PalCyc_WWZFloorUW(pc,d0.w),(paletteBuffAlt+$62).w
-
-		addq.b	#1,palCycIndex.w		; Increment the palette cycle index
-		cmpi.b	#5,palCycIndex.w		; Has it reached the end of the cycle?
-		bcs.s	.End				; If not, branch
-		clr.b	palCycIndex.w		; Reset the palette cycle index
-
-.End:
-		rts
+		lea	(paletteBuffAlt+($20*3)+(2*9)).w,a0	; Load the destination address within the alternate palette buffer.
+		move.l	PalCyc_HPZWaterfallUW(pc,d0.w),(a0)+	; Transfer the colors for this frame.
+		move.l	PalCyc_HPZWaterfallUW+4(pc,d0.w),(a0)	; ^
+		
+.end:
+		rts						; Return.
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-PalCyc_WWZFloor:
-		dc.w	$C28, $000, $0EE, $000, $EEE
-PalCyc_WWZFloorUW:
-		dc.w	$E48, $220, $2EE, $220, $EEE
+PalCyc_HPZWaterfall:
+		dc.w    $0E44, $0E82, $0EA8, $0EEE, $0E44, $0E82, $0EA8, $0EEE
+PalCyc_HPZWaterfallUW:
+		dc.w    $0E84, $0EA6, $0EC6, $0EE6, $0E84, $0EA6, $0EC6, $0EE6
+
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Animated art routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
