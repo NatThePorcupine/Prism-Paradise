@@ -226,8 +226,8 @@ ObjPlayer_DoModes:
 		jsr	ObjPlayer_Modes(pc,d0.w)	; Jump to the right routine
 
 		bsr.w	ObjPlayer_ExtendedCam		; Handle extended camera
-		bsr.w	ObjPlayer_ChkBounce		; Check for bouncy floor collision
-		bsr.w	ObjPlayer_ChkHang		; Check for hanging
+	;	bsr.w	ObjPlayer_ChkBounce		; Check for bouncy floor collision
+	;	bsr.w	ObjPlayer_ChkHang		; Check for hanging
 	;	bra.w	ObjPlayer_ChkElectric		; Check for electricity
 
 .NoMode:

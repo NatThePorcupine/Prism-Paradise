@@ -482,9 +482,9 @@ Level_PLCs:
 ; Wacky Workbench PLCs
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 PLC_WWZ:
-		dc.w	0
-		dc.l	ArtKosM_Bumper
-		dc.w	$6B60
+		dc.w	-1
+	;	dc.l	ArtKosM_Bumper
+	;	dc.w	$6B60
 	;	dc.l	ArtKosM_Orbinaut
 	;	dc.w	$71A0
 	;	dc.l	ArtKosM_Diamond
