@@ -1089,7 +1089,7 @@ Level_FindFloor:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .IsSolid:
 		movea.l	currentColAddr.w,a2		; Get collision data pointer
-		add.w	d0,d0				; Turn ID into offset
+	;	add.w	d0,d0				; Turn ID into offset
 		move.b	(a2,d0.w),d0			; Get collision block ID
 		andi.w	#$FF,d0				; ''
 		beq.s	.IsBlank			; If the angle is 0, branch
@@ -1167,7 +1167,7 @@ Level_FindFloor2:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .IsSolid:
 		movea.l	currentColAddr.w,a2			; Get collision data pointer
-		add.w	d0,d0				; Turn ID into offset
+	;	add.w	d0,d0				; Turn ID into offset
 		move.b	(a2,d0.w),d0			; Get collision block ID
 		andi.w	#$FF,d0				; ''
 		beq.s	.IsBlank			; If the angle is 0, branch
@@ -1253,7 +1253,7 @@ Level_FindWall:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .IsSolid:
 		movea.l	currentColAddr.w,a2			; Get collision data pointer
-		add.w	d0,d0				; Turn ID into offset
+	;	add.w	d0,d0				; Turn ID into offset
 		move.b	(a2,d0.w),d0			; Get collision block ID
 		andi.w	#$FF,d0				; ''
 		beq.s	.IsBlank			; If the angle is 0, branch
@@ -1331,7 +1331,7 @@ Level_FindWall2:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .IsSolid:
 		movea.l	currentColAddr.w,a2			; Get collision data pointer
-		add.w	d0,d0				; Turn ID into offset
+	;	add.w	d0,d0				; Turn ID into offset
 		move.b	(a2,d0.w),d0			; Get collision block ID
 		andi.w	#$FF,d0				; ''
 		beq.s	.IsBlank			; If the angle is 0, branch

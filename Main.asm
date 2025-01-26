@@ -257,17 +257,20 @@ HPZ_Rings:
 		incbin	"Zones/Hidden Palace/Rings.bin"
 		even
 HPZ_Collision:
-		dc.l	.ColData, .Angles, .Heights, .HeightsR
-.ColData:
-		incbin	"Zones/Hidden Palace/Collision.bin"
+		dc.l	HPZ_PrimaryCol, HPZ_SecondaryCol, HPZ_Angles, HPZ_Heights, HPZ_HeightsR
+HPZ_PrimaryCol:
+		incbin	"Zones/Hidden Palace/Primary Collision.bin"
 		even
-.Angles:
+HPZ_SecondaryCol:
+		incbin	"Zones/Hidden Palace/Secondary Collision.bin"
+		even
+HPZ_Angles:
 		incbin	"Zones/Hidden Palace/Angle Values.bin"
 		even
-.Heights:
+HPZ_Heights:
 		incbin	"Zones/Hidden Palace/Height Values.bin"
 		even
-.HeightsR:
+HPZ_HeightsR:
 		incbin	"Zones/Hidden Palace/Height Values (Rotated).bin"
 		even
 HPZ_Chunks:

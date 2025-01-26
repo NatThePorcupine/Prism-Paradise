@@ -103,10 +103,10 @@ Level_LoadData:
 		move.l	(a3)+,ringMgrLayout.w		; Set ring position data pointer
 		movea.l	(a3)+,a3			; Get collision data pointers
 		move.l	(a3)+,d0			; Get collision data address
-		move.l	d0,currentColAddr.w			; Set collision address to primary
-		move.l	d0,primaryColPtr.w			; Set primary collision data pointer
-		addq.l	#1,d0				; Increment address for secondary collision
-		move.l	d0,secondaryColPtr.w			; Set secondary collision data pointer
+		move.l	d0,currentColAddr.w		; Set collision address to primary
+		move.l	d0,primaryColPtr.w		; Set primary collision data pointer
+		move.l	(a3)+,secondaryColPtr.w		; Set secondary collision data pointer
+		
 		lea	angleValPtr.w,a1		; Collision pointers
 		move.l	(a3)+,(a1)+			; Set angle value array pointer
 		move.l	(a3)+,(a1)+			; Set normal hiehgt map array pointer
