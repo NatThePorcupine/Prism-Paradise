@@ -280,9 +280,9 @@ Level_DataPointers:
 ; Size and start position data
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_SizeStartPos:
-		dc.w	$3600, $800
+		dc.w	$3600, $700
 		incbin	"Zones/Hidden Palace/Start Position.bin"
-		dc.w	$3600, $800
+		dc.w	$3600, $700
 		incbin	"Zones/Hidden Palace/Start Position.bin"
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Dynamic events routines

@@ -8,8 +8,8 @@ namespace SonicRetro.SonLVL.API.S1D
 		// Internal Read Generic Layout
 		private void ReadLayoutInternal(byte[] rawdata, ref ushort[,] layout)
 		{
-			int width = ByteConverter.ToUInt16(rawdata, 0) + 1;
-			int height = ByteConverter.ToUInt16(rawdata, 2) + 1;
+			int width = ByteConverter.ToUInt16(rawdata, 0);
+			int height = ByteConverter.ToUInt16(rawdata, 2);
 			layout = new ushort[width, height];
 			
 			for (int row = 0; row < height; row++)
@@ -40,8 +40,8 @@ namespace SonicRetro.SonLVL.API.S1D
 			
 			int width = layout.GetLength(0);
 			int height = layout.GetLength(1);
-			tmp.AddRange(ByteConverter.GetBytes((ushort)(width - 1)));
-			tmp.AddRange(ByteConverter.GetBytes((ushort)(height - 1)));
+			tmp.AddRange(ByteConverter.GetBytes((ushort)(width)));
+			tmp.AddRange(ByteConverter.GetBytes((ushort)(height)));
 			
 			// Layout Pointers
 			for (int row = 0; row < height; row++)

@@ -52,10 +52,10 @@ smpsPitch10hi:	EQU +120	; $78
 	enum	fTone_0A,fTone_0B,fTone_0C,fTone_0D
 ; ---------------------------------------------------------------------------------------------
 ; DAC Equates
-	enumset	$81
-	enum	dKick,dSnare,dTimpani,dHiTimpani,dMidTimpani,dLowTimpani,dVLowTimpani
-	enum	dClap,dScratch,dHiTom,dVLowClap,dMidTom,dLowTom,dFloorTom,dHiClap
-	enum	dMidClap,dLowClap
+;	enumset	$81
+;	enum	dKick,dSnare,dTimpani,dHiTimpani,dMidTimpani,dLowTimpani,dVLowTimpani
+;	enum	dClap,dScratch,dHiTom,dVLowClap,dMidTom,dLowTom,dFloorTom,dHiClap
+;	enum	dMidClap,dLowClap
 ; ---------------------------------------------------------------------------------------------
 ; Channel IDs for SFX
 cPSG1				EQU $80

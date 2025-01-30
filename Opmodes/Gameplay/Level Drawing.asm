@@ -427,19 +427,37 @@ Level_GetRow:
 		lsr.w	#2,d5				; Divide by 4
 		move.b	d5,cRBlks(a1)			; Set tile count for the first set of tiles for a row
 		
-		lsr.w	#3,d0				; Get X within chunk data
+		asr.w	#3,d0				; Get X within chunk data
 		move.w	d0,d2				; ''
 		andi.w	#6,d2				; ''
-		lsr.w	#1,d1				; Get Y within chunk data
+		asr.w	#1,d1				; Get Y within chunk data
 		move.w	d1,d3				; ''
 		andi.w	#$18,d3				; ''
 		add.w	d3,d2				; Combine X and Y to get chunk offset
 		
-		lsr.w	#2,d0				; Get X within layout data
-		andi.w	#$3FE,d0			; ''
-		lsr.w	#4,d1				; Get Y within layout data
-		andi.w	#$3FE,d1			; ''
+		move.w	(a2),d7				; Get the layout width specified in the header
+		asr.w	#3,d0				; Get X within layout data
+		bpl.s	.LayoutXPositive		; Branch ahead if the layout X is positive
+		add.w	d7,d0				; If not, fix it (only accounts for a single wrap)
 
+.LayoutXPositive:
+		andi.l	#$1FF,d0			; Keep within the maximum allowed width and clear the upper word
+		divu.w	d7,d0				; Keep X value in-bounds
+		swap	d0				; ''
+		add.w	d0,d0				; Turn into an offset
+
+		move.w	2(a2),d7			; Get the layout height specified in the header
+		asr.w	#5,d1				; Get Y within layout data
+		bpl.s	.LayoutYPositive		; Branch ahead if the layout Y is positive
+		add.w	d7,d1				; If not, fix it (only accounts for a single wrap)
+
+.LayoutYPositive:
+		andi.l	#$1FF,d1			; Keep within the maximum allowed height and clear the upper word
+		divu.w	d7,d1				; Keep Y value in-bounds
+		swap	d1				; ''
+		add.w	d1,d1				; Turn into an offset
+
+		movem.w	d0-d1,-(sp)			; Backup layout X and Y 
 		add.w	4(a2,d1.w),d0			; Combine X and Y to get layout offset
 		getChunk				; Get chunk pointer at current location
 
@@ -474,13 +492,24 @@ Level_GetRow:
 		andi.w	#6,d2				; Have we gone outside of the chunk?
 		bne.s	.DrawBlock_Cont			; If not, branch
 		
-		addq.w	#2,d0				; Next chunk
+		movem.w	(sp)+,d0-d1			; Get saved layout X and Y from the stack
+		lsr.w	#1,d0				; Turn the offset into index value
+		addq.w	#1,d0				; Increment to the next chunk
+		cmp.w	(a2),d0				; Are we still in-bounds?
+		blo.s	.GetNextChunk			; If so, branch
+		clr.w	d0				; Otherwise, correct the index value
+
+.GetNextChunk:
+		add.w	d0,d0				; Turn the index back into offset
+		movem.w	d0-d1,-(sp)			; Push a backup copy back onto the stack
+		add.w	4(a2,d1.w),d0			; Next chunk
 		getChunk				; ''
 
 .DrawBlock_Cont:
 		add.w	d3,d2				; Recombine X and Y to get chunk offset
 		dbf	d4,.DrawBlock_Loop		; Loop
 
+		addq.w	#4,sp				; Discard backup layout X and Y from the stack 
 		rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Get a block column and store it in a plane buffer
@@ -516,20 +545,37 @@ Level_GetCol:
 		lsr.w	#8,d5				; Divide by $100
 		move.b	d5,cCBlks(a1)			; Set tile count for the first set of tiles for a column
 
-		lsr.w	#3,d0				; Get X within chunk data
+		asr.w	#3,d0				; Get X within chunk data
 		move.w	d0,d2				; ''
 		andi.w	#6,d2				; ''
-		lsr.w	#1,d1				; Get Y within chunk data
+		asr.w	#1,d1				; Get Y within chunk data
 		move.w	d1,d3				; ''
 		andi.w	#$18,d3				; ''
 		add.w	d2,d3				; Combine X and Y to get chunk offset
 
-		lsr.w	#2,d0				; Get X within layout data
-		andi.w	#$3FE,d0			; ''
-		lsr.w	#4,d1				; Get Y within layout data
-		andi.w	#$3FE,d1			; ''
+		move.w	(a2),d7				; Get the layout width specified in the header
+		asr.w	#3,d0				; Get X within layout data
+		bpl.s	.LayoutXPositive		; Branch ahead if the layout X is positive
+		add.w	d7,d0				; If not, fix it (only accounts for a single wrap)
+
+.LayoutXPositive:
+		andi.l	#$1FF,d0			; Keep within the maximum allowed width and clear the upper word
+		divu.w	d7,d0				; Keep X value in-bounds
+		swap	d0				; ''
+		add.w	d0,d0				; Turn into an offset
+
+		move.w	2(a2),d7			; Get the layout height specified in the header
+		asr.w	#5,d1				; Get Y within layout data
+		bpl.s	.LayoutYPositive		; Branch ahead if the layout Y is positive
+		add.w	d7,d1				; If not, fix it (only accounts for a single wrap)
+
+.LayoutYPositive:
+		andi.l	#$1FF,d1			; Keep within the maximum allowed height and clear the upper word
+		divu.w	d7,d1				; Keep Y value in-bounds
+		swap	d1				; ''
+		add.w	d1,d1				; Turn into an offset
+
 		movem.w	d0-d1,-(sp)			; Backup layout X and Y 
-		
 		add.w	4(a2,d1.w),d0			; Combine X and Y to get layout offset
 		getChunk				; Get chunk pointer at current location
 
@@ -569,9 +615,15 @@ Level_GetCol:
 		bne.s	.DrawBlock_Cont			; If not, branch
 
 		movem.w	(sp)+,d0-d1			; Get saved layout X and Y from the stack
-		addq.w	#2,d1				; Increase layout data Y offset to the next pointer
+		lsr.w	#1,d1				; Turn the offset into index value
+		addq.w	#1,d1				; Increase layout data Y index to the next pointer
+		cmp.w	2(a2),d1			; Are we still in-bounds?
+		blo.s	.GetNextChunk			; If so, branch
+		clr.w	d1				; Otherwise, reset the index value
+
+.GetNextChunk:
+		add.w	d1,d1				; Turn the index back into offset
 		movem.w	d0-d1,-(sp)			; Push a backup copy back onto the stack
-		
 		add.w	4(a2,d1.w),d0			; Next chunk
 		getChunk				; ''
 
@@ -579,7 +631,7 @@ Level_GetCol:
 		add.w	d2,d3				; Recombine X and Y to get chunk offset
 		dbf	d4,.DrawBlock_Loop		; Loop
 
-		movem.w	(sp)+,d0-d1			; Discard backup layout X and Y from the stack 
+		addq.w	#4,sp				; Discard backup layout X and Y from the stack 
 		rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Refresh a plane

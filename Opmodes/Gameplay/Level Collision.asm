@@ -1396,12 +1396,37 @@ Level_FindWall2:
 Level_FindBlock:
 		movea.l	(lvlLayout).w,a1		; Get level layout pointer address
 
+		move.w	(a1),d4				; Get the layout width specified in the header
 		move.w	d3,d0				; Get X within layout data
-		lsr.w	#5,d0				; ''
-		andi.w	#$3FE,d0			; ''
+		asr.w	#6,d0				; ''
+		bpl.s	.xIsPositive			; If layout X is positive, branch
+		add.w	d4,d0				; Otherwise, correct it (accounts for a single negative horizontal wrap)
+
+.xIsPositive:
+		cmp.w	d4,d0				; Is the current layout X in bounds?
+		blo.s	.xInBounds			; If so, branch
+		sub.w	d4,d0				; Otherwise, attempt to correct it
+		cmp.w	d4,d0				; Is it still out-of-bounds?
+		bhs.s	.outOfBounds			; If so, branch and return block zero of chunk zero
+
+.xInBounds:
+		add.w	d0,d0				; Turn into an offset
+
+		move.w	2(a1),d4			; Get the layout height specified in the header
 		move.w	d2,d1				; Get Y within layout data
-		lsr.w	#5,d1				; ''
-		andi.w	#$3FE,d1			; ''
+		asr.w	#6,d1				; ''
+		bpl.s	.yIsPositive			; If layout X is positive, branch
+		add.w	d4,d1				; Otherwise, correct it (accounts for a single negative vertical wrap)
+
+.yIsPositive:
+		cmp.w	d4,d1				; Is the current layout Y in bounds?
+		blo.s	.yInBounds			; If so, branch
+		sub.w	d4,d1				; Otherwise, attempt to correct it
+		cmp.w	d4,d1				; Is it still out-of-bounds?
+		bhs.s	.outOfBounds			; If so, branch and return block zero of chunk zero	
+
+.yInBounds:
+		add.w	d1,d1				; Turn into an offset
 
 		add.w	4(a1,d1.w),d0			; Combine X and Y to get layout offset
 		move.w	(a1,d0.w),d1			; Get chunk ID
@@ -1420,5 +1445,9 @@ Level_FindBlock:
 		add.w	d0,d1				; Combine X and Y to get chunk offset
 
 		adda.w	d1,a1				; Adjust by the offset of the block within the chunk
+		rts
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+.outOfBounds:
+		movea.l	(chunkDataPtr).w,a1
 		rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
