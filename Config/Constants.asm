@@ -54,4 +54,8 @@ RAM_END			equ	$FFFFFF+1			; M68K RAM end address
 
 RAM_WORD_START		equ	$FFFF8000			; Starting address of absolute word addressable M68K RAM
 RAM_WORD_END		equ	$FFFFFFFF+1			; Ending address of absolute word addressable M68K RAM
+
+VALLOC_START_TILE	equ	$400
+VALLOC_END_TILE		equ	$600
+VALLOC_MAX_NODES	equ	32
 ; =========================================================================================================================================================

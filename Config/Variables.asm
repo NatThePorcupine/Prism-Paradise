@@ -81,8 +81,14 @@ fgColBuff	rs.b	$82				; Foreground vertical plane buffer
 bgRowBuff	rs.b	$102				; Background horizontal plane buffer
 bgColBuff	rs.b	$82				; Background vertical plane buffer
 
-;ampsVars		rs.b	0			; AMPS variables
-;		include	"Sound/amps/code/ram.asm"
+vallocStartTile	rs.w	1
+vallocEndTile	rs.w	1
+vallocLeftover	rs.w	1
+vallocHead	rs.w	1
+vallocTail	rs.w	1
+vallocFreeHead	rs.w	1
+vallocFreeTail	rs.w	1
+vallocNodeList	rs.b	vnode*VALLOC_MAX_NODES
 
 		; --- ENGINE VARIABLES ---
 

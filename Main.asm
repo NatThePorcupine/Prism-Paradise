@@ -64,12 +64,14 @@ GotoGameMode:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Function libraries
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-		include	"Libraries/VDP.asm"		; VDP functions
-		include	"Libraries/Joypad.asm"		; Joypad functions
-		include	"Libraries/Decompression.asm"	; Decompression functions
-		include	"Libraries/Math.asm"		; Math functions
-		include	"Libraries/Object.asm"		; Object functions
-		include	"Libraries/Interrupt.asm"	; Interrupt functions
+		include	"Libraries/VDP.asm"			; VDP functions
+		include	"Libraries/Joypad.asm"			; Joypad functions
+		include	"Libraries/Decompression.asm"		; Decompression functions
+		include	"Libraries/Math.asm"			; Math functions
+		include	"Libraries/Object.asm"			; Object functions
+		include	"Libraries/Interrupt.asm"		; Interrupt functions
+
+		include	"Libraries/VRAM Allocator.asm"		; VRAM Allocator functions
 
 ; =========================================================================================================================================================
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -87,16 +89,16 @@ ObjNull:
 		jmp	DeleteObject
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		include	"Objects/Player/Code.asm"		; Player object
-		include	"Objects/Ring/Code.asm"		; Ring loss object
-		include	"Objects/Explosion/Code.asm"	; Explosion object
+		include	"Objects/Ring/Code.asm"			; Ring loss object
+		include	"Objects/Explosion/Code.asm"		; Explosion object
 		include	"Objects/Water Surface/Code.asm"	; Water surface object
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-		include	"Objects/Monitor/Code.asm"	; Monitor object
+		include	"Objects/Monitor/Code.asm"		; Monitor object
 		include	"Objects/Spikes/Code.asm"		; Spike object
 		include	"Objects/Spring/Code.asm"		; Spring object
-		include	"Objects/Checkpoint/Code.asm"	; Checkpoint object
-		include	"Objects/Wall Spring/Code.asm"	; Wall spring object
-		include	"Objects/Ball Mode/Code.asm"	; Ball mode switch object
+		include	"Objects/Checkpoint/Code.asm"		; Checkpoint object
+		include	"Objects/Wall Spring/Code.asm"		; Wall spring object
+		include	"Objects/Ball Mode/Code.asm"		; Ball mode switch object
 		include	"Objects/Bumper/Code.asm"		; Bumper object
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Unused/Temporary

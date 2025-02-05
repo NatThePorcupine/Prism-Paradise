@@ -60,14 +60,14 @@ InitObjectList:
 ;	a2.l	- Trashed
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 FindFreeObj:
-		move.w	objExecFree.w,d0			; get pointer to the next free object
+		move.w	objExecFree.w,d0		; get pointer to the next free object
 		beq.s	.rts				; if it's a null pointer (z=1), return
 		movea.w	d0,a1				; load to a1
-		move.w	_objPrev(a1),objExecFree.w		; copy the next free object pointer to list start
+		move.w	_objPrev(a1),objExecFree.w	; copy the next free object pointer to list start
 
-		move.w	objExecLast.w,a2			; load last object to a2
-		move.w	a1,objExecLast.w			; save as the new last object
-		move.w	_objNext(a2),_objNext(a1)		; copy the next pointer from old tail to new object
+		move.w	objExecLast.w,a2		; load last object to a2
+		move.w	a1,objExecLast.w		; save as the new last object
+		move.w	_objNext(a2),_objNext(a1)	; copy the next pointer from old tail to new object
 		move.w	a1,_objNext(a2)			; save new object as next pointer for old tail
 		move.w	a2,_objPrev(a1)			; save old tail as prev pointer for new object
 
